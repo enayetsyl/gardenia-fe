@@ -3,11 +3,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import envConfig from '@/config/envConfig';
 import Cookies from 'js-cookie';
-export interface RegisterUser {
-  name: string;
-  email: string;
-  password: string;
-}
+import { ForgetPasswordProps, LoginUser, RegisterUser } from '@/type';
+import { forgetPassword } from '@/services/AuthService';
 
 export interface AuthResponse {
   success: boolean;
@@ -50,7 +47,7 @@ export const authApi = createApi({
         }
       },
     }),
-    loginUser: builder.mutation<AuthResponse, RegisterUser>({
+    loginUser: builder.mutation<AuthResponse, LoginUser>({
       query: (userData) => ({
         url: '/auth/login',
         method: 'POST',
@@ -68,8 +65,42 @@ export const authApi = createApi({
         }
       },
     }),
+    forgetPassword: builder.mutation<AuthResponse, ForgetPasswordProps>({
+      query: (formData) => ({
+        url: '/auth/forget-password',
+        method: 'POST',
+        body: formData,
+      }),
+      onQueryStarted: async (args, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          // Handle success if needed
+        } catch (error) {
+          console.error('Error during password reset:', error);
+        }
+      },
+    }),
+    resetPassword: builder.mutation<AuthResponse, ResetPasswordProps>({
+      query: ({ id, token, password }) => ({
+        url: `/auth/reset-password`,
+        method: 'POST',
+        body: { id, token, password },
+      }),
+      onQueryStarted: async (args, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error('Error during password reset:', error);
+        }
+      },
+    }),
   }),
 });
 
 // Export hooks for usage in functional components
-export const { useRegisterUserMutation, useLoginUserMutation } = authApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useForgetPasswordMutation,
+  useResetPasswordMutation,
+} = authApi;

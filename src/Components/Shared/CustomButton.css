@@ -1,0 +1,30 @@
+/* CustomButton.css */
+.bg-slide-left,
+.bg-slide-right {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  transition: all 0.5s ease;
+  z-index: 0;
+}
+
+.bg-slide-left {
+  left: 0;
+  background-color: #66bb6a; /* Left color */
+  transform: translateX(-100%);
+}
+
+.bg-slide-right {
+  right: 0;
+  background-color: #66bb6a; /* Right color */
+  transform: translateX(100%);
+}
+
+button:hover .bg-slide-left {
+  transform: translateX(0);
+}
+
+button:hover .bg-slide-right {
+  transform: translateX(0);
+}

@@ -1,12 +1,4 @@
-import React from 'react';
-
-interface CustomButtonProps {
-  text: string;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
-  className?: string;
-}
+import { CustomButtonProps } from '@/type';
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   text,
@@ -20,7 +12,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 rounded  disabled:bg-gray-400 ${className}`}
+      className={`px-4 py-2 rounded transition duration-800 disabled:bg-gray-400  hover:animate-button-hover cursor-pointer ${className}`}
     >
       {text}
     </button>

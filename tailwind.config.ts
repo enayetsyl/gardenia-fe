@@ -56,11 +56,14 @@ const config: Config = {
         'h3-lg': ['2.25rem', { lineHeight: '2.75rem' }], // 36px for large screens
         'p-lg': ['1.125rem', { lineHeight: '2rem' }], // 18px for large screens
       },
+      // tailwind.config.js
       backgroundImage: {
-        'gradient-heading': 'linear-gradient(to right, #2E7D32, #66BB6A)', // Gradient for headings
+        'gradient-heading':
+          'linear-gradient(to right, #2E7D32, #66BB6A, #FFB300)', // More distinct colors
       },
+
       animation: {
-        'button-hover': 'hoverEffect 0.3s ease-in-out', // Button hover animation
+        'button-hover': 'hoverEffect 1s ease-in-out', // Button hover animation
       },
       keyframes: {
         hoverEffect: {
