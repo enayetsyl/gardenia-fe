@@ -7,6 +7,7 @@ export type CustomInputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   disabled?: boolean;
+  name?: string;
 };
 
 export type CustomButtonProps = {
