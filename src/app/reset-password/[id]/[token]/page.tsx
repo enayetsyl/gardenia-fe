@@ -20,7 +20,7 @@ const ResetPassword = ({
   // const { id, token } = router.query;
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
- 
+
   const [resetPassword, { isLoading, isError, isSuccess }] =
     useResetPasswordMutation();
 
@@ -34,7 +34,7 @@ const ResetPassword = ({
 
     try {
       await resetPassword({ id, token, password }).unwrap();
-     
+
       toast.success('Password reset successfully!');
       // router.push('/login');
     } catch (error) {
