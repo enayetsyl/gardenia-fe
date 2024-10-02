@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';
 import CustomButton from '@/Components/Shared/CustomButton';
 import Modal from 'react-modal';
-import followerImage1 from "../../../../public/user-profile-image-1.webp"
-import followerImage2 from "../../../../public/user-profile-image-2.jpg"
-import followerImage3 from "../../../../public/user-profile-image-3.jpg"
+import followerImage1 from '../../../../public/user-profile-image-1.webp';
+import followerImage2 from '../../../../public/user-profile-image-2.jpg';
+import followerImage3 from '../../../../public/user-profile-image-3.jpg';
 
 // Dummy data for followers
 const followersData = [
@@ -52,10 +52,13 @@ const Followers = () => {
             className="text-primary-light text-lg"
           />
         </div>
-        <p className='text-sm text-gray-500 mb-2'>361 followers</p>
+        <p className="text-sm text-gray-500 mb-2">361 followers</p>
         <div className="grid grid-cols-3 gap-2 h-full">
           {followersData.slice(0, 6).map((follower, index) => (
-            <div key={index} className="rounded-xl border p-2 bg-background hover:bg-gray-100 cursor-pointer flex flex-col items-start ">
+            <div
+              key={index}
+              className="rounded-xl border p-2 bg-background hover:bg-gray-100 cursor-pointer flex flex-col items-start "
+            >
               <Image
                 src={follower.photo}
                 alt={follower.name}
@@ -63,7 +66,9 @@ const Followers = () => {
                 height={150}
                 className="rounded-lg object-cover flex-1"
               />
-              <p className="text-xs text-start mt-2 font-semibold">{follower.name}</p>
+              <p className="text-xs text-start mt-2 font-semibold">
+                {follower.name}
+              </p>
             </div>
           ))}
         </div>
@@ -85,7 +90,10 @@ const Followers = () => {
           <h2 className="text-xl font-bold mb-4">All Followers</h2>
           <div className="grid grid-cols-3 gap-4 py-4">
             {followersData.map((follower, index) => (
-              <div key={index} className="rounded-xl border p-2 bg-background hover:bg-gray-100 cursor-pointer flex flex-col items-start ">
+              <div
+                key={index}
+                className="rounded-xl border p-2 bg-background hover:bg-gray-100 cursor-pointer flex flex-col items-start "
+              >
                 <Image
                   src={follower.photo}
                   alt={follower.name}
@@ -93,7 +101,9 @@ const Followers = () => {
                   height={150}
                   className="rounded-lg object-cover flex-1"
                 />
-                <p className="text-xs text-start mt-2 font-semibold">{follower.name}</p>
+                <p className="text-xs text-start mt-2 font-semibold">
+                  {follower.name}
+                </p>
               </div>
             ))}
           </div>
