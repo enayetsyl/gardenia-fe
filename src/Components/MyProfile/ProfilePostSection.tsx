@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const ProfilePostSection = () => {
-  return (
-    <div>ProfilePostSection</div>
-  )
-}
+  return <div>ProfilePostSection</div>;
+};
 
-export default ProfilePostSection
+export default ProfilePostSection;
