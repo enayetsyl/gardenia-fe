@@ -9,7 +9,7 @@ const MyProfile = () => {
     <div className="bg-background-light min-h-screen">
       <ProfileHeader />
       <CustomContainer>
-        <div className="grid grid-cols-12">
+        <div className="grid grid-cols-12 gap-5">
           <div className="col-span-12 lg:col-span-5">
             <ProfileInfo />
           </div>

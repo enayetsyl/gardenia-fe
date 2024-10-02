@@ -6,7 +6,7 @@ import LifeEvent from './ProfileInfo/LifeEvent';
 
 const ProfileInfo = () => {
   return (
-    <div className="p-4 space-y-3">
+    <div className="space-y-3">
       <Intro></Intro>
       <ProfilePhotos></ProfilePhotos>
       <Friends></Friends>
