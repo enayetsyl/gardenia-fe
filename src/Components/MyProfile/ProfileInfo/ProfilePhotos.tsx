@@ -1,4 +1,4 @@
-'use client'; 
+'use client';
 import CardBone from '@/Components/Shared/CardBone';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -36,16 +36,16 @@ function ProfilePhotos() {
 
   const handleOpenEnlargeImage = (index) => {
     setCurrentImageIndex(index);
-    setZoomLevel(1); 
+    setZoomLevel(1);
     setIsEnlargeImageOpen(true);
   };
 
   const handleZoomIn = () => {
-    setZoomLevel((prev) => Math.min(prev + 0.2, 3)); 
+    setZoomLevel((prev) => Math.min(prev + 0.2, 3));
   };
 
   const handleZoomOut = () => {
-    setZoomLevel((prev) => Math.max(prev - 0.2, 1)); 
+    setZoomLevel((prev) => Math.max(prev - 0.2, 1));
   };
 
   const handleNextImage = () => {
@@ -55,7 +55,7 @@ function ProfilePhotos() {
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
-    setZoomLevel(1); 
+    setZoomLevel(1);
   };
 
   const handleFullScreen = () => {
@@ -92,23 +92,27 @@ function ProfilePhotos() {
         </div>
       </CardBone>
 
-     {/* Modal to display all photos */}
-     <Modal
+      {/* Modal to display all photos */}
+      <Modal
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
         contentLabel="All Photos"
         className="fixed inset-0 flex items-center justify-center p-10 bg-black bg-opacity-50 z-40"
         overlayClassName="fixed inset-0 bg-black bg-opacity-75 z-30"
       >
-        <div className="relative bg-white p-6 rounded-lg max-w-3xl w-full h-[90vh] overflow-y-auto"> {/* Set height to 90vh and make content scrollable */}
-        {/* Close Icon */}
+        <div className="relative bg-white p-6 rounded-lg max-w-3xl w-full h-[90vh] overflow-y-auto">
+          {' '}
+          {/* Set height to 90vh and make content scrollable */}
+          {/* Close Icon */}
           {/* Close Icon */}
           <FaTimes
             className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer z-40"
             onClick={handleCloseModal}
           />
           <h2 className="text-xl font-bold mb-4">All Photos</h2>
-          <div className="grid grid-cols-3 gap-4 py-4"> {/* Added gap and padding */}
+          <div className="grid grid-cols-3 gap-4 py-4">
+            {' '}
+            {/* Added gap and padding */}
             {photos.map((photo, index) => (
               <Image
                 key={index}
@@ -121,7 +125,6 @@ function ProfilePhotos() {
               />
             ))}
           </div>
-
         </div>
       </Modal>
 
@@ -136,13 +139,11 @@ function ProfilePhotos() {
           onZoomIn={handleZoomIn}
           onZoomOut={handleZoomOut}
           onFullScreen={handleFullScreen}
-          className="fixed inset-0 z-50" 
+          className="fixed inset-0 z-50"
         />
       )}
     </div>
   );
 }
-
-
 
 export default ProfilePhotos;

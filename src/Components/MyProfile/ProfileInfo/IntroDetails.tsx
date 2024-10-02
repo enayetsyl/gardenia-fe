@@ -139,7 +139,7 @@ const IntroDetails = () => {
 
           <div className="flex justify-start items-center gap-3">
             <PiRssBold className="text-2xl" />
-            <p className='text-sm'>
+            <p className="text-sm">
               Followed by <strong>{details.followers}</strong>
             </p>
           </div>
@@ -152,7 +152,9 @@ const IntroDetails = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-               {details.website.replace(/(^\w+:|^)\/\//, '').replace(/^www\./, '')}
+                {details.website
+                  .replace(/(^\w+:|^)\/\//, '')
+                  .replace(/^www\./, '')}
               </Link>
             </p>
           </div>

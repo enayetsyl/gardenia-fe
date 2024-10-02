@@ -1,7 +1,7 @@
 import React from 'react';
 import Intro from './ProfileInfo/Intro';
 import ProfilePhotos from './ProfileInfo/ProfilePhotos';
-import Friends from './ProfileInfo/Friends';
+import Friends from './ProfileInfo/Followers';
 import LifeEvent from './ProfileInfo/LifeEvent';
 
 const ProfileInfo = () => {
