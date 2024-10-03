@@ -208,10 +208,7 @@ const TabsContent: React.FC<TabsContentProps> = ({
             ease: 'easeInOut',
             delay: 0.5,
           }}
-          className={cn(
-            'bg-background-dark px-4  relative',
-            className || ''
-          )}
+          className={cn('bg-background-dark px-4  relative', className || '')}
         >
           {children}
         </motion.div>
@@ -367,7 +364,7 @@ const Login: React.FC = () => {
               disabled={isRegisterLoading}
               className="bg-button-bg hover:bg-button-hover text-button-text "
             />
-{/* 
+            {/* 
             <p className="text-center text-sm">
               Already have an account.
               <Link

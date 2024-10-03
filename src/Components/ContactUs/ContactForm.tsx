@@ -28,7 +28,7 @@ const ContactForm = () => {
   // Handle form submission
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
+    // console.log('Form Data:', formData);
     // You can add form submission logic here (e.g., API call)
     toast.success('Message submitted successfully!');
 

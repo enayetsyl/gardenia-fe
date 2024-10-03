@@ -6,9 +6,9 @@ import CustomButton from '../Shared/CustomButton';
 import userImage from '../../../public/user-profile-image-1.webp';
 import Image from 'next/image';
 import {
-  FaAudible,
+  // FaAudible,
   FaFileAudio,
-  FaHeadphones,
+  // FaHeadphones,
   FaImage,
   FaVideo,
 } from 'react-icons/fa6';

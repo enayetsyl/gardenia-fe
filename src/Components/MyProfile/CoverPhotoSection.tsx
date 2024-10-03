@@ -2,8 +2,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import coverPhoto1 from '../../../public/cover-photo-1.jpg';
-import coverPhoto2 from '../../../public/cover-photo-2.jpg';
-import coverPhoto3 from '../../../public/cover-photo-3.jpg';
 
 const CoverPhotoSection = () => {
   const [coverPhoto, setCoverPhoto] = useState(coverPhoto1); // Replace with your default cover photo URL
