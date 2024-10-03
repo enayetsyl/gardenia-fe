@@ -6,12 +6,14 @@ import profilePhoto1 from '../../../public/user-profile-image-1.webp';
 const ProfileImage = () => {
   const [profilePhoto, setProfilePhoto] = useState(profilePhoto1); // Default profile photo URL
 
-  const handleProfilePhotoChange = (event) => {
-    const file = event.target.files[0];
+  const handleProfilePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event?.target?.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setProfilePhoto(reader.result);
+        if (typeof reader.result === 'string') {
+          setProfilePhoto(reader.result as unknown as StaticImageData);
+        }
       };
       reader.readAsDataURL(file);
     }
