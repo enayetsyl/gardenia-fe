@@ -36,7 +36,7 @@ interface TabContextType {
 
 const TabContext = createContext<TabContextType | undefined>(undefined);
 
-export const useTabs = () => {
+const useTabs = () => {
   const context = useContext(TabContext);
   if (!context) {
     throw new Error('useTabs must be used within a TabsProvider');
