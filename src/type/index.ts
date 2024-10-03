@@ -11,7 +11,8 @@ export type CustomInputProps = {
 };
 
 export type CustomButtonProps = {
-  text: string;
+  text?: string;
+  icon?: ReactNode;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;

@@ -5,6 +5,13 @@ import CardBone from '../Shared/CardBone';
 import CustomButton from '../Shared/CustomButton';
 import userImage from '../../../public/user-profile-image-1.webp';
 import Image from 'next/image';
+import {
+  FaAudible,
+  FaFileAudio,
+  FaHeadphones,
+  FaImage,
+  FaVideo,
+} from 'react-icons/fa6';
 
 const CreatePost = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +40,7 @@ const CreatePost = () => {
     <div>
       {/* Initial Input Field */}
       <CardBone>
-        <div className="flex justify-start items-center gap-3 mb-5">
+        <div className="flex justify-start items-center gap-3 mb-5 pt-2">
           <Image
             src={userImage}
             alt="User Profile Image"
@@ -51,22 +58,22 @@ const CreatePost = () => {
         <hr className="text-slate-800" />
         <div className="flex justify-center items-center gap-5 pt-3">
           <CustomButton
-            text="Image"
+            icon={<FaImage />}
             type="button"
             onClick={handleOpenModal}
-            className="px-10 py-2 hover:bg-gray-300 rounded-lg  text-gray-500"
+            className="px-2.5 py-3 text-xl bg-primary-light hover:bg-primary rounded-lg  text-white"
           />
           <CustomButton
-            text="Video"
+            icon={<FaVideo />}
             type="button"
             onClick={handleOpenModal}
-            className="px-10 py-2 hover:bg-gray-300 rounded-lg  text-gray-500"
+            className="px-2.5 py-3 text-xl bg-primary-light hover:bg-primary rounded-lg  text-white"
           />
           <CustomButton
-            text="Audio"
+            icon={<FaFileAudio />}
             type="button"
             onClick={handleOpenModal}
-            className="px-10 py-2 hover:bg-gray-300 rounded-lg  text-gray-500"
+            className="px-2.5 py-3 text-xl bg-primary-light hover:bg-primary rounded-lg  text-white"
           />
         </div>
       </CardBone>
