@@ -1,6 +1,5 @@
 import { Gallery } from 'next-gallery';
 import garden1 from '../../../public/garden-1.jpg';
-import garden2 from '../../../public/garden-2.jpg';
 import garden3 from '../../../public/garden-3.jpg';
 import garden4 from '../../../public/garden-4.jpg';
 import garden5 from '../../../public/garden-5.jpg';
@@ -92,7 +91,11 @@ const ImageGallery = () => {
 
       <div className="flex flex-col gap-5 max-w-4xl mx-auto ">
         <Gallery
-          {...{ images, widths, ratios }}
+          {...{
+            images: images.map(img => ({ ...img, src: img.src.src })),
+            widths,
+            ratios
+          }}
           lastRowBehavior="match-previous"
         />
       </div>

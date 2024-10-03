@@ -16,7 +16,6 @@ const ForgetPassword = () => {
 
   const handleUserForgetPassword = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('form data', formData);
     handleForgetPassword(formData);
   };
 

@@ -3,7 +3,6 @@ import CustomButton from '@/Components/Shared/CustomButton';
 import CustomContainer from '@/Components/Shared/CustomContainer';
 import CustomInput from '@/Components/Shared/CustomInput';
 import { useResetPasswordMutation } from '@/lib/api/authApi';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -12,16 +11,15 @@ const ResetPassword = ({
 }: {
   params: { id: string; token: string };
 }) => {
-  const router = useRouter();
+ 
 
   const { id, token } = params;
 
-  console.log('id and token', id, token);
-  // const { id, token } = router.query;
+  
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [resetPassword, { isLoading, isError, isSuccess }] =
+  const [resetPassword, { isLoading }] =
     useResetPasswordMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,9 +34,9 @@ const ResetPassword = ({
       await resetPassword({ id, token, password }).unwrap();
 
       toast.success('Password reset successfully!');
-      // router.push('/login');
+      
     } catch (error) {
-      console.error('Failed to reset password:', error);
+      // console.error('Failed to reset password:', error);
       toast.success('Failed to reset password. Please try again.');
     }
   };

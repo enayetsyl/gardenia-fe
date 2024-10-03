@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import envConfig from '@/config/envConfig';
 import Cookies from 'js-cookie';
 import { ForgetPasswordProps, LoginUser, RegisterUser } from '@/type';
-import { forgetPassword } from '@/services/AuthService';
+// import { forgetPassword } from '@/services/AuthService';
 
 export interface AuthResponse {
   success: boolean;
@@ -43,7 +43,7 @@ export const authApi = createApi({
             Cookies.set('refreshToken', data.data.refreshToken);
           }
         } catch (error) {
-          console.error('Error during registration:', error);
+          // console.error('Error during registration:', error);
         }
       },
     }),
@@ -80,7 +80,7 @@ export const authApi = createApi({
         }
       },
     }),
-    resetPassword: builder.mutation<AuthResponse, ResetPasswordProps>({
+    resetPassword: builder.mutation<AuthResponse, ForgetPasswordProps>({
       query: ({ id, token, password }) => ({
         url: `/auth/reset-password`,
         method: 'POST',
@@ -90,7 +90,7 @@ export const authApi = createApi({
         try {
           await queryFulfilled;
         } catch (error) {
-          console.error('Error during password reset:', error);
+          // console.error('Error during password reset:', error);
         }
       },
     }),

@@ -53,5 +53,6 @@ export type LoginUser = {
 };
 
 export type ForgetPasswordProps = {
+  id?: string;
   email: string;
 };
