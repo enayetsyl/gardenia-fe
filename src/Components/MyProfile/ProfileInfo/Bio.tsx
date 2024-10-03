@@ -19,7 +19,7 @@ const Bio = () => {
     setIsEditing(false);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewBio(event.target.value);
   };
 

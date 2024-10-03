@@ -4,15 +4,19 @@ import Image from 'next/image';
 import coverPhoto1 from '../../../public/cover-photo-1.jpg';
 
 const CoverPhotoSection = () => {
-  const [coverPhoto, setCoverPhoto] = useState(coverPhoto1); // Replace with your default cover photo URL
+  const [coverPhoto, setCoverPhoto] = useState(coverPhoto1);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleCoverPhotoChange = (event) => {
-    const file = event.target.files[0];
+  const handleCoverPhotoChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setCoverPhoto(reader.result);
+        if (typeof reader.result === 'string') {
+          setCoverPhoto({ src: reader.result, height: 0, width: 0 });
+        }
       };
       reader.readAsDataURL(file);
     }

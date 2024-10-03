@@ -16,22 +16,22 @@ import {
 const CreatePost = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postContent, setPostContent] = useState('');
-  const [media, setMedia] = useState(null);
+  const [media, setMedia] = useState<File | null>(null);
 
   // Handler for opening and closing modal
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   // Handler for file upload
-  const handleMediaUpload = (event) => {
-    const file = event.target.files[0];
-    setMedia(file);
+  const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event?.target?.files?.[0];
+    if (file) {
+      setMedia(file);
+    }
   };
 
   // Handler for post submission
   const handlePostSubmit = () => {
-    console.log('Post content:', postContent);
-    console.log('Media:', media);
     // Add logic to handle post submission (e.g., saving to database)
     setIsModalOpen(false);
   };
@@ -121,7 +121,7 @@ const CreatePost = () => {
           {/* Display Media Preview */}
           {media && (
             <p className="mt-2 text-sm text-gray-600">
-              Uploaded File: {media.name}
+              Uploaded File: {(media as File).name}
             </p>
           )}
 
