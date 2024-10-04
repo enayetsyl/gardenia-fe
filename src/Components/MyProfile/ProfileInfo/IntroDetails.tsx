@@ -8,19 +8,26 @@ import { FaHeart } from 'react-icons/fa';
 import { PiRssBold } from 'react-icons/pi';
 import { TbWorld } from 'react-icons/tb';
 
+type Details = {
+  study: string;
+  location: string;
+  maritalStatus: string;
+  followers: string;
+  website: string;
+};
+
 const IntroDetails = () => {
   // Initial details data
-  const [details, setDetails] = useState({
+  const [details, setDetails] = useState<Details>({
     study: 'Programming Hero',
     location: 'Sylhet',
     maritalStatus: 'Married',
     followers: '329 people',
-
     website: 'https://md-enayetur-rahman-portfolio.vercel.app/',
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editableDetails, setEditableDetails] = useState(details);
+  const [editableDetails, setEditableDetails] = useState<Details>(details);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +86,7 @@ const IntroDetails = () => {
             <input
               type="text"
               name="followers"
-              value={editableDetails?.followers}
+              value={editableDetails.followers}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
             />

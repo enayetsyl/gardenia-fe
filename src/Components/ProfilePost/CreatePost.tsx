@@ -33,7 +33,10 @@ const CreatePost = () => {
   // Handler for post submission
   const handlePostSubmit = () => {
     // Add logic to handle post submission (e.g., saving to database)
+    setPostContent('');
+    setMedia(null);
     setIsModalOpen(false);
+
   };
 
   return (

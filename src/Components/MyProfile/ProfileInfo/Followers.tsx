@@ -8,9 +8,14 @@ import Modal from 'react-modal';
 import followerImage1 from '../../../../public/user-profile-image-1.webp';
 import followerImage2 from '../../../../public/user-profile-image-2.jpg';
 import followerImage3 from '../../../../public/user-profile-image-3.jpg';
+import { StaticImageData } from 'next/image';
 
+type Follower = {
+  name: string;
+  photo: StaticImageData;
+};
 // Dummy data for followers
-const followersData = [
+const followersData: Follower[] = [
   { name: 'Digontha Das', photo: followerImage1 },
   { name: 'নাঈম মুক্তাকিম', photo: followerImage2 },
   { name: 'Al Emran', photo: followerImage3 },

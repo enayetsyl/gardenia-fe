@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import coverPhoto1 from '../../../public/cover-photo-1.jpg';
 
 const CoverPhotoSection = () => {
-  const [coverPhoto, setCoverPhoto] = useState(coverPhoto1);
+  const [coverPhoto, setCoverPhoto] = useState<StaticImageData | string>(coverPhoto1);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleCoverPhotoChange = (
@@ -15,7 +15,7 @@ const CoverPhotoSection = () => {
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === 'string') {
-          setCoverPhoto({ src: reader.result, height: 0, width: 0 });
+          setCoverPhoto(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -28,8 +28,8 @@ const CoverPhotoSection = () => {
       <Image
         src={coverPhoto}
         alt="Cover Photo"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: 'cover' }}
         className="rounded-md"
       />
 
