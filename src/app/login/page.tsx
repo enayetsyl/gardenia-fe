@@ -295,15 +295,7 @@ const Login: React.FC = () => {
               disabled={isLoginLoading}
               className="bg-button-bg hover:bg-button-hover text-button-text "
             />
-            {/* <p className="text-center text-sm">
-              Don't have an account?{' '}
-              <Link
-                href={'/register'}
-                className="hover:text-link-hover hover:font-bold underline"
-              >
-                Register
-              </Link>
-            </p> */}
+           
           </form>
         </div>
       </TabsContent>
@@ -360,16 +352,7 @@ const Login: React.FC = () => {
               disabled={isRegisterLoading}
               className="bg-button-bg hover:bg-button-hover text-button-text "
             />
-            {/* 
-            <p className="text-center text-sm">
-              Already have an account.
-              <Link
-                href={'/login'}
-                className="hover:text-link-hover hover:font-bold underline"
-              >
-                Login
-              </Link>
-            </p> */}
+           
           </form>
         </div>
       </TabsContent>
