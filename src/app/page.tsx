@@ -1,22 +1,14 @@
-import Counter from '@/Components/Counter';
-import ResetButton from '@/Components/ResetButton';
-import Result from '@/Components/Result';
-import React from 'react';
+'use client'
+import Loading from '@/Components/Shared/Loading';
+import React, { useState } from 'react';
 
-const page = () => {
+const Home = () => {
+  const [loading, setLoading] = useState(false);
   return (
     <div className="w-screen flex flex-col gap-10 mt-10 items-center">
-      <h1 className="text-center font-bold text-2xl text-gray-600">
-        Redux Counter
-      </h1>
-      <div className="flex flex-col gap-4 items-center">
-        <h1>Component 1</h1>
-        <Counter />
-        <Result />
-      </div>
-      <ResetButton />
+    <Loading/>
     </div>
   );
 };
 
-export default page;
+export default Home;
