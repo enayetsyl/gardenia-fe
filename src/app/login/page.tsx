@@ -98,18 +98,18 @@ interface TabsBtnProps {
 const TabsBtn: React.FC<TabsBtnProps> = ({ children, className, value }) => {
   const {
     activeTab,
-    // setPrevIndex,
-    // setActiveTab,
+    setPrevIndex,
+    setActiveTab,
     defaultValue,
-    // hover,
+    hover,
     wobbly,
-    // tabsOrder,
+    tabsOrder,
   } = useTabs();
 
-  // const handleClick = () => {
-  //   setPrevIndex(tabsOrder.indexOf(activeTab));
-  //   setActiveTab(value);
-  // };
+  const handleClick = () => {
+    setPrevIndex(tabsOrder.indexOf(activeTab));
+    setActiveTab(value);
+  };
 
   return (
     <motion.div
@@ -117,13 +117,13 @@ const TabsBtn: React.FC<TabsBtnProps> = ({ children, className, value }) => {
         'cursor-pointer sm:p-2 p-1 sm:px-4 px-2 rounded-md relative',
         className || ''
       )}
-      // onFocus={() => {
-      //   hover && handleClick();
-      // }}
-      // onMouseEnter={() => {
-      //   hover && handleClick();
-      // }}
-      // onClick={handleClick}
+      onFocus={() => {
+        hover && handleClick();
+      }}
+      onMouseEnter={() => {
+        hover && handleClick();
+      }}
+      onClick={handleClick}
     >
       {children}
 
