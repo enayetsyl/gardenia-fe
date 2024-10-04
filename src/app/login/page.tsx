@@ -138,7 +138,7 @@ const TabsBtn: React.FC<TabsBtnProps> = ({ children, className, value }) => {
               },
             }}
             layoutId={defaultValue}
-            className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-white rounded-md z-[1]"
+            className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-background-dark rounded-md z-[1]"
           />
         </AnimatePresence>
       )}
@@ -155,7 +155,7 @@ const TabsBtn: React.FC<TabsBtnProps> = ({ children, className, value }) => {
                 },
               }}
               layoutId={defaultValue}
-              className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-white rounded-md z-[1] tab-shadow"
+              className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-background-dark rounded-md z-[1] tab-shadow"
             />
           </AnimatePresence>
           <AnimatePresence mode="wait">
@@ -168,7 +168,7 @@ const TabsBtn: React.FC<TabsBtnProps> = ({ children, className, value }) => {
                 },
               }}
               layoutId={`${defaultValue}b`}
-              className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-white rounded-md z-[1] tab-shadow"
+              className="absolute w-full h-full left-0 top-0 dark:bg-base-dark bg-background-dark rounded-md z-[1] tab-shadow"
             />
           </AnimatePresence>
         </>
