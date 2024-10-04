@@ -3,7 +3,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import envConfig from '@/config/envConfig';
 import Cookies from 'js-cookie';
-import { ForgetPasswordProps, LoginUser, RegisterUser } from '@/type';
+import { ForgetPasswordProps, LoginUser, RegisterUser, ResetPasswordProps } from '@/type';
 // import { forgetPassword } from '@/services/AuthService';
 
 export interface AuthResponse {
@@ -80,7 +80,7 @@ export const authApi = createApi({
         }
       },
     }),
-    resetPassword: builder.mutation<AuthResponse, ForgetPasswordProps>({
+    resetPassword: builder.mutation<AuthResponse, ResetPasswordProps>({
       query: ({ id, token, password }) => ({
         url: `/auth/reset-password`,
         method: 'POST',

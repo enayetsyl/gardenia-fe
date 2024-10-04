@@ -56,3 +56,9 @@ export type ForgetPasswordProps = {
   id?: string;
   email: string;
 };
+
+export type ResetPasswordProps = {
+  id?: string;
+  token?: string;
+  password: string;
+};
