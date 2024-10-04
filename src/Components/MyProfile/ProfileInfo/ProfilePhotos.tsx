@@ -34,7 +34,7 @@ function ProfilePhotos() {
     setIsModalOpen(false);
   };
 
-  const handleOpenEnlargeImage = (index) => {
+  const handleOpenEnlargeImage = (index: number) => {
     setCurrentImageIndex(index);
     setZoomLevel(1);
     setIsEnlargeImageOpen(true);
@@ -60,7 +60,7 @@ function ProfilePhotos() {
 
   const handleFullScreen = () => {
     const element = document.getElementById('enlarge-image');
-    if (element.requestFullscreen) {
+    if (element && element.requestFullscreen) {
       element.requestFullscreen();
     }
   };
@@ -121,7 +121,7 @@ function ProfilePhotos() {
                 width={150}
                 height={80}
                 className="rounded-xl border p-4 bg-background hover:bg-gray-100 h-full w-full cursor-pointer object-cover"
-                onClick={() => handleOpenEnlargeImage(index)} // Enable enlarge on click
+                onClick={() => handleOpenEnlargeImage(index)} 
               />
             ))}
           </div>
@@ -129,7 +129,7 @@ function ProfilePhotos() {
       </Modal>
 
       {/* EnlargeImage to display the enlarged image */}
-      {isEnlargeImageOpen && (
+      {isEnlargeImageOpen  && (
         <EnlargedImage
           image={photos[currentImageIndex]}
           onClose={() => setIsEnlargeImageOpen(false)}

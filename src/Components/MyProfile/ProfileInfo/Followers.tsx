@@ -89,7 +89,7 @@ const Followers = () => {
           />
           <h2 className="text-xl font-bold mb-4">All Followers</h2>
           <div className="grid grid-cols-3 gap-4 py-4">
-            {followersData.map((follower, index) => (
+            {followersData?.map((follower, index) => (
               <div
                 key={index}
                 className="rounded-xl border p-2 bg-background hover:bg-gray-100 cursor-pointer flex flex-col items-start "

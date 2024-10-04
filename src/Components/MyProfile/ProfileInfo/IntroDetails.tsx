@@ -23,7 +23,7 @@ const IntroDetails = () => {
   const [editableDetails, setEditableDetails] = useState(details);
 
   // Handle input changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditableDetails((prevDetails) => ({
       ...prevDetails,
@@ -79,22 +79,22 @@ const IntroDetails = () => {
             <input
               type="text"
               name="followers"
-              value={editableDetails.followers}
+              value={editableDetails?.followers}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
             />
           </div>
 
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <label className="block">LinkedIn:</label>
             <input
               type="text"
               name="linkedin"
-              value={editableDetails.linkedin}
+              value={editableDetails?.linkedin}
               onChange={handleChange}
               className="w-full p-2 border rounded-md"
             />
-          </div>
+          </div> */}
 
           <div className="mb-2">
             <label className="block">Website:</label>
