@@ -1,8 +1,21 @@
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
+import React from 'react';
 import { FaSearchMinus, FaSearchPlus, FaTimes } from 'react-icons/fa';
 import { FaArrowLeft, FaArrowRight, FaExpand } from 'react-icons/fa6';
 
-const EnlargedImage = ({
+type EnlargedImageProps = {
+  image: StaticImageData;
+  onClose: () => void;
+  onNext: () => void;
+  onPrev: () => void;
+  zoomLevel: number;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onFullScreen: () => void;
+  className?: string; // Add className prop here
+};
+
+const EnlargedImage: React.FC<EnlargedImageProps> = ({
   image,
   onClose,
   onNext,
