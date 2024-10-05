@@ -39,7 +39,7 @@ export default function RootLayout({
                 background: '#2E7D32', // Use your primary color
                 color: '#FFFFFF',
                 border: '1px solid #000',
-                padding: '16px',
+                padding: '10px 35px',
               },
               success: {
                 style: {
