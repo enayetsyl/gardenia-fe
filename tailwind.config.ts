@@ -72,6 +72,10 @@ const config: Config = {
           '100%': { transform: 'scale(1)' },
         },
       },
+      boxShadow: {
+        'neomorphic': '5px 5px 10px #c3c9c4, -5px -5px 10px #ffffff',
+        'neomorphic-inset': 'inset 3px 3px 6px #000000, inset -3px -3px 6px #ffffff',
+      },
     },
   },
   plugins: [],

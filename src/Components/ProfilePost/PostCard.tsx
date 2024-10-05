@@ -39,12 +39,7 @@ const PostCard: React.FC<PostCardProps> = ({
     setLikes(likes + 1);
   };
 
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      setComments([...comments, newComment]);
-      setNewComment('');
-    }
+  const handleCommentSubmit = () => {
   };
 
   const handleFavorite = () => {
