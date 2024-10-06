@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { StaticImageData } from 'next/image';
 
 export type CustomInputProps = {
   type?: string;
@@ -62,3 +63,16 @@ export type ResetPasswordProps = {
   token?: string;
   password: string;
 };
+
+
+
+export type GardeningTip = {
+  imageLink: StaticImageData;
+  frontheading: string;
+  backDetails: string;
+};
+
+export type GardeningQuote = {
+  quote: string;
+  by: string;
+}
