@@ -6,9 +6,13 @@ import CustomContainer from '../Shared/CustomContainer';
 import CustomButton from '../Shared/CustomButton';
 import VerifiedButton from './VerifiedButton';
 import { useUser } from '@/hooks/user.hook';
+import { useGetUpvotesQuery } from '@/lib/api/postApi';
 
 const ProfileHeader = () => {
   const { user } = useUser();
+  const { data : upvotes } = useGetUpvotesQuery(user?._id as string);
+  console.log('upvotes', upvotes);
+  console.log('user', user);
   return (
     <div>
       <CoverPhotoSection />
@@ -20,16 +24,19 @@ const ProfileHeader = () => {
           </div>
 
           <div>
-            {user?.isVerified ? (
+            {user?.isVerified && (
               <VerifiedButton />
-            ) : (
-              <CustomButton
+            ) }
+            {
+              upvotes?.data && !user?.isVerified  && (
+                <CustomButton
                 text="Verify Profile"
                 // onClick={() => {}}
                 type="button"
                 className="bg-button-bg text-button-text px-4 py-2 hover:bg-button-hover"
               />
-            )}
+              )
+            }
           </div>
         </div>
       </CustomContainer>

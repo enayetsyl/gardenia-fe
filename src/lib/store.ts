@@ -1,18 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
 import CounterSlice from './features/CounteState/CounterSlice';
 import { authApi } from './api/authApi';
-import UserReducer from './features/UserState/UserSlice';
 import { userApi } from './api/userApi';
+import { postApi } from './api/postApi';
+import UserReducer from './features/UserState/UserSlice';
+
+
 export const makeStore = () => {
   return configureStore({
     reducer: {
       counter: CounterSlice,
       user: UserReducer,
+      [postApi.reducerPath]: postApi.reducer,
       [authApi.reducerPath]: authApi.reducer,
       [userApi.reducerPath]: userApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(authApi.middleware, userApi.middleware),
+      getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, postApi.middleware),
   });
 };
 

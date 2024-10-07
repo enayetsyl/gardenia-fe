@@ -105,3 +105,16 @@ export interface User {
   passwordChangedAt: string;
   isVerified: boolean;
 }
+
+export type Post = {
+  title?: string;
+  content?: string;
+  images?: string[];
+  category: string;
+  isPremium?: boolean;
+  userId: string;
+  upvotes?: number;
+  link?: string;
+  createdAt: string;
+  updatedAt: string;
+}
