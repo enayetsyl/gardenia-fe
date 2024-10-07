@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
         { user ? (
           <>
             <Link
-              href="/profile"
+              href="/my-profile"
               className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md mb-2 transition-all duration-300 shadow-neomorphic hover:shadow-neomorphic-inset"
             >
               My Profile

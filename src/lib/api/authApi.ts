@@ -16,6 +16,11 @@ export interface AuthResponse {
   };
   message: string;
 }
+export interface UserResponse {
+  success: boolean;
+  data: User;
+  message: string;
+}
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -97,7 +102,7 @@ export const authApi = createApi({
         }
       },
     }),
-    getCurrentUser: builder.query<User, string>({
+    getCurrentUser: builder.query<UserResponse, string>({
       query: (userId) => `/auth/me/${userId}`,
       onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
         try {
