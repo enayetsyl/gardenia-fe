@@ -14,7 +14,7 @@ const GardeningTips = () => {
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {
         gardeningTips.map((tip) => (
-          <TipsCard key={tip.imageLink} imageLink={tip.imageLink} frontheading={tip.frontheading} backDetails={tip.backDetails} />
+          <TipsCard key={tip.frontheading} imageLink={tip.imageLink} frontheading={tip.frontheading} backDetails={tip.backDetails} />
         ))
       }
       </div>

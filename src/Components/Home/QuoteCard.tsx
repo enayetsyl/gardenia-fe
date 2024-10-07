@@ -6,7 +6,6 @@ const QuotesCard = ({quote, by}: {quote: string, by: string}) => {
 >
   <figure className="w-full h-full">
     <div
-      alt="change to a img tag"
       className="bg-background-light text-primary-light min-h-full rounded-lg border border-opacity-5"
     ></div>
   </figure>

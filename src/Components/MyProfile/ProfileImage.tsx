@@ -2,24 +2,41 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { FiCamera } from 'react-icons/fi';
-import profilePhoto1 from '../../../public/user-profile-image-1.webp';
 import { StaticImageData } from 'next/image';
+import { useUser } from '@/hooks/user.hook';
+import { useUploadUserImageMutation } from '@/lib/api/userApi';
+import toast from 'react-hot-toast';
 
 const ProfileImage = () => {
-  const [profilePhoto, setProfilePhoto] = useState<StaticImageData | string>(profilePhoto1); // Default profile photo URL
+  const { user } = useUser(); 
+  const [profilePhoto, setProfilePhoto] = useState<StaticImageData | string>(user?.userImage || '');
+  const [uploadUserImage] = useUploadUserImageMutation();
 
-  const handleProfilePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleProfilePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (typeof e.target?.result === 'string') {
-          setProfilePhoto(e.target.result);
-        }
-      };
-      reader.readAsDataURL(file);
+    
+
+    if (!file || !user?._id) {
+        toast.error('Please select a file and login to upload');
+        return;
     }
-  };
+
+    try {
+        
+        const result = await uploadUserImage({ userId: user._id as string, image: file }).unwrap();
+
+        if (result?.data?.user?.userImage) {
+            setProfilePhoto(result.data.user.userImage);
+            toast.success('Profile photo updated successfully');
+        } else {
+            toast.error('Failed to update profile photo');
+        }
+    } catch (error) {
+      toast.error('Failed to upload image:');
+    }
+};
+
 
   return (
     <div className="relative w-32 h-32">
@@ -29,7 +46,7 @@ const ProfileImage = () => {
         alt="Profile Photo"
         width={128}
         height={128}
-        className="rounded-full border-4 border-white"
+        className="rounded-full border-4 border-white object-cover"
       />
 
       <input

@@ -24,9 +24,9 @@ const LikeButton = ({onClick, likes}: {onClick: () => void, likes: number}) => {
           transform="translate(-1.088 -0.541)"
           fill="none"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
         ></path>
         <path
           id="Trazado_28220"
@@ -35,9 +35,9 @@ const LikeButton = ({onClick, likes}: {onClick: () => void, likes: number}) => {
           transform="translate(-2 -2)"
           fill="none"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
         ></path>
       </g>
     </svg>

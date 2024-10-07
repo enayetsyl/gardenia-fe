@@ -9,7 +9,7 @@ import image10 from '../../public/garden-10.jpg'
 import gardener1 from '../../public/user-profile-image-1.webp'
 import gardener2 from '../../public/user-profile-image-2.jpg'
 import gardener3 from '../../public/user-profile-image-3.jpg'
-import { Gardener, GardeningQuote, GardeningTip } from '@/type'
+import { Gardener, GardeningQuote, GardeningTip, NavItem } from '@/type'
 
 
 export const gardeningTips: GardeningTip[] = [
@@ -100,4 +100,12 @@ export const gardeners: Gardener[] = [
     profileImage: gardener1,
     isVerified: false,
   },
+];
+
+export const navItems: NavItem[] = [
+  { name: 'Home', path: '/' },
+  { name: 'News Feed', path: '/news-feed' },
+  { name: 'Gallery', path: '/image-gallery' },
+  { name: 'About Us', path: '/about-us' },
+  { name: 'Contact', path: '/contact-us' },
 ];

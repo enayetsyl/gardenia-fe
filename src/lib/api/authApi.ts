@@ -3,7 +3,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import envConfig from '@/config/envConfig';
 import Cookies from 'js-cookie';
-import { ForgetPasswordProps, LoginUser, RegisterUser, ResetPasswordProps } from '@/type';
+import { ForgetPasswordProps, LoginUser, RegisterUser, ResetPasswordProps, User } from '@/type';
+import { setUser } from '../features/UserState/UserSlice';
 // import { forgetPassword } from '@/services/AuthService';
 
 export interface AuthResponse {
@@ -11,6 +12,7 @@ export interface AuthResponse {
   data: {
     accessToken: string;
     refreshToken: string;
+    user: User;
   };
   message: string;
 }
@@ -35,7 +37,7 @@ export const authApi = createApi({
         method: 'POST',
         body: userData,
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
           if (data.success) {
@@ -53,12 +55,13 @@ export const authApi = createApi({
         method: 'POST',
         body: userData,
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
         try {
           const { data } = await queryFulfilled;
           if (data.success) {
             Cookies.set('accessToken', data.data.accessToken);
             Cookies.set('refreshToken', data.data.refreshToken);
+            dispatch(setUser(data.data.user));
           }
         } catch (error) {
           console.error('Error during login:', error);
@@ -71,7 +74,7 @@ export const authApi = createApi({
         method: 'POST',
         body: formData,
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
           // Handle success if needed
@@ -86,7 +89,7 @@ export const authApi = createApi({
         method: 'POST',
         body: { id, token, password },
       }),
-      onQueryStarted: async (args, { queryFulfilled }) => {
+      onQueryStarted: async (_, { queryFulfilled }) => {
         try {
           await queryFulfilled;
         } catch (error) {

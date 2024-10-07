@@ -36,22 +36,21 @@ export default function RootLayout({
           {children}
           <Toaster
             toastOptions={{
-              // Apply custom colors from your Tailwind theme
               style: {
-                background: '#2E7D32', // Use your primary color
+                background: '#2E7D32', 
                 color: '#FFFFFF',
                 border: '1px solid #000',
                 padding: '10px 35px',
               },
               success: {
                 style: {
-                  background: '#66BB6A', // Use a lighter primary color for success toasts
+                  background: '#66BB6A', 
                   color: '#FFFFFF',
                 },
               },
               error: {
                 style: {
-                  background: '#FF8F00', // Use secondary dark color for error toasts
+                  background: '#FF8F00', 
                   color: '#FFFFFF',
                 },
               },

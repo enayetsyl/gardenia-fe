@@ -84,3 +84,23 @@ export type Gardener = {
   profileImage: StaticImageData;
   isVerified: boolean;
 };
+
+export interface NavItem {
+  name: string;
+  path: string;
+}
+
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  userImage: string;
+  passwordChangedAt: string;
+  isVerified: boolean;
+}
