@@ -5,44 +5,47 @@ import { FiCamera } from 'react-icons/fi';
 import { StaticImageData } from 'next/image';
 import { useUser } from '@/hooks/user.hook';
 import { useUploadUserImageMutation } from '@/lib/api/userApi';
+import userImage from '../../../public/user-placeholder-image.jpg';
 import toast from 'react-hot-toast';
 
 const ProfileImage = () => {
-  const { user } = useUser(); 
-  const [profilePhoto, setProfilePhoto] = useState<StaticImageData | string>(user?.userImage || '');
+  const { user, refetchUser } = useUser();
+  const [profilePhoto, setProfilePhoto] = useState<StaticImageData | string>(
+    user?.userImage || userImage
+  );
   const [uploadUserImage] = useUploadUserImageMutation();
 
-
-  const handleProfilePhotoChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfilePhotoChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
-    
-
     if (!file || !user?._id) {
-        toast.error('Please select a file and login to upload');
-        return;
+      toast.error('Please select a file and login to upload');
+      return;
     }
 
     try {
-        
-        const result = await uploadUserImage({ userId: user._id as string, image: file }).unwrap();
-
-        if (result?.data?.user?.userImage) {
-            setProfilePhoto(result.data.user.userImage);
-            toast.success('Profile photo updated successfully');
-        } else {
-            toast.error('Failed to update profile photo');
-        }
+      const result = await uploadUserImage({
+        userId: user._id as string,
+        image: file,
+      }).unwrap();
+      if (result?.data?.userImage) {
+        setProfilePhoto(result.data.userImage);
+        await refetchUser(); 
+        toast.success('Profile photo updated successfully');
+      } else {
+        toast.error('Failed to update profile photo');
+      }
     } catch (error) {
-      toast.error('Failed to upload image:');
+      toast.error('Failed to upload image');
     }
-};
-
+  };
 
   return (
     <div className="relative w-32 h-32">
       {/* Profile Photo */}
       <Image
-        src={profilePhoto}
+        src={user?.userImage || userImage}
         alt="Profile Photo"
         width={128}
         height={128}

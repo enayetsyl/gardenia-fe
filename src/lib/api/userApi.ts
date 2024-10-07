@@ -6,14 +6,10 @@ import { User } from '@/type';
 
 export interface UserResponse {
   success: boolean;
-  data: {
-    user: User,
-  };
+  data: User;
   message: string;
   statusCode: number;
 }
-
-
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -32,9 +28,19 @@ export const userApi = createApi({
       query: ({ userId, image }) => {
         const formData = new FormData();
         formData.append('image', image);
-
         return {
           url: `/users/upload-image/${userId}`,
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
+    uploadCoverImage: builder.mutation<UserResponse, { userId: string; image: File }>({
+      query: ({ userId, image }) => {
+        const formData = new FormData();
+        formData.append('image', image);
+        return {
+          url: `/users/upload-cover-image/${userId}`, 
           method: 'POST',
           body: formData,
         };
@@ -43,4 +49,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useUploadUserImageMutation } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation } = userApi;

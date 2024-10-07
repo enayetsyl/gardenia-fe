@@ -97,6 +97,19 @@ export const authApi = createApi({
         }
       },
     }),
+    getCurrentUser: builder.query<User, string>({
+      query: (userId) => `/auth/me/${userId}`,
+      onQueryStarted: async (_, { queryFulfilled, dispatch }) => {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.success) {
+            dispatch(setUser(data.data));
+          }
+        } catch (error) {
+          console.error('Error fetching current user:', error);
+        }
+      },
+    }),
   }),
 });
 
@@ -106,4 +119,5 @@ export const {
   useLoginUserMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
+  useGetCurrentUserQuery, // Add this new export
 } = authApi;

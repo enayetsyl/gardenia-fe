@@ -101,6 +101,7 @@ export interface User {
   updatedAt: string;
   status: string;
   userImage: string;
+  coverImage: string;
   passwordChangedAt: string;
   isVerified: boolean;
 }

@@ -2,23 +2,42 @@
 import React, { useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import coverPhoto1 from '../../../public/cover-photo-1.jpg';
+import { useUser } from '@/hooks/user.hook';
+import { useUploadCoverImageMutation } from '@/lib/api/userApi';
+import toast from 'react-hot-toast';
 
 const CoverPhotoSection = () => {
-  const [coverPhoto, setCoverPhoto] = useState<StaticImageData | string>(coverPhoto1);
+  const { user, refetchUser } = useUser();
+
+  const [uploadCoverImage] = useUploadCoverImageMutation();
+
+  const [coverPhoto, setCoverPhoto] = useState<StaticImageData | string>(user?.coverImage || coverPhoto1);
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleCoverPhotoChange = (
+  const handleCoverPhotoChange = async(
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          setCoverPhoto(reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
+    if (!file || !user?._id) {
+      toast.error('Please select a file and login to upload');
+      return;
+  }
+
+  try {
+    const result = await uploadCoverImage({ userId: user._id as string, image: file }).unwrap();
+    console.log('result', result);
+    if (result?.data?.coverImage) {
+      setCoverPhoto(result.data.coverImage);
+      await refetchUser();
+      setIsEditing(false);
+      toast.success('Cover photo updated successfully');
+    } else {
+      toast.error('Failed to update cover photo');
+    }
+  } catch (error) {
+    console.log('error', error);
+      toast.error('Failed to update cover photo');
     }
   };
 
@@ -26,7 +45,7 @@ const CoverPhotoSection = () => {
     <div className="relative w-full h-64">
       {/* Cover Photo */}
       <Image
-        src={coverPhoto}
+        src={user?.coverImage || coverPhoto}
         alt="Cover Photo"
         fill
         style={{ objectFit: 'cover' }}
@@ -39,7 +58,7 @@ const CoverPhotoSection = () => {
           onClick={() => setIsEditing(!isEditing)}
           className="bg-gray-800 text-white px-4 py-2 rounded-md"
         >
-          {isEditing ? 'Cancel' : 'Edit Cover Photo'}
+          {isEditing ? '' : 'Edit Cover Photo'}
         </button>
       </div>
 
