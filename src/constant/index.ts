@@ -6,7 +6,10 @@ import image7 from '../../public/garden-7.jpg'
 import image8 from '../../public/garden-8.jpg'
 import image9 from '../../public/garden-9.jpg'
 import image10 from '../../public/garden-10.jpg'
-import { GardeningQuote, GardeningTip } from '@/type'
+import gardener1 from '../../public/user-profile-image-1.webp'
+import gardener2 from '../../public/user-profile-image-2.jpg'
+import gardener3 from '../../public/user-profile-image-3.jpg'
+import { Gardener, GardeningQuote, GardeningTip } from '@/type'
 
 
 export const gardeningTips: GardeningTip[] = [
@@ -64,4 +67,37 @@ export const gardeningQuotes: GardeningQuote[] = [
   { quote: "My garden is my most beautiful masterpiece.", by: "Claude Monet" },
   { quote: "The love of gardening is a seed once sown that never dies.", by: "Gertrude Jekyll" },
   { quote: "Gardening is how I relax. It’s another form of creating and playing with colors.", by: "Oscar de la Renta" }
+];
+
+
+
+export const gardeners: Gardener[] = [
+  {
+    id: 1,
+    name: 'Jane Doe',
+    bio: 'An expert in indoor gardening with a love for rare plants.',
+    profileImage: gardener1,
+    isVerified: true,
+  },
+  {
+    id: 2,
+    name: 'John Smith',
+    bio: 'Organic farming enthusiast and community gardener.',
+    profileImage: gardener2,
+    isVerified: true,
+  },
+  {
+    id: 3,
+    name: 'Emily Johnson',
+    bio: 'Landscape designer sharing creative garden ideas.',
+    profileImage: gardener3,
+    isVerified: true,
+  },
+  {
+    id: 4,
+    name: 'Michael Chen',
+    bio: 'Sustainable gardening advocate and urban farming specialist.',
+    profileImage: gardener1,
+    isVerified: false,
+  },
 ];

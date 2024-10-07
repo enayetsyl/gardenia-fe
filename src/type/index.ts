@@ -76,3 +76,11 @@ export type GardeningQuote = {
   quote: string;
   by: string;
 }
+
+export type Gardener = {
+  id: number;
+  name: string;
+  bio: string;
+  profileImage: StaticImageData;
+  isVerified: boolean;
+};

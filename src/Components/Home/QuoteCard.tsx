@@ -2,7 +2,7 @@ const QuotesCard = ({quote, by}: {quote: string, by: string}) => {
   return (
     <div>
 <div
-  className="relative rounded-lg -skew-x-6 -translate-x-2 -translate-y-6 hover:-translate-y-1 hover:-translate-x-0 hover:skew-x-0 duration-500 w-72 h-44 p-2 bg-background-dark card-compact hover:bg-base-200 transition-all [box-shadow:12px_12px_#66bb6a] hover:[box-shadow:4px_4px_#66bb6a]"
+  className="relative rounded-lg -skew-x-6 -translate-x-2 -translate-y-6 hover:-translate-y-1 hover:-translate-x-0 hover:skew-x-0 duration-500 w-72 h-44 p-2 bg-background-dark card-compact hover:bg-base-200 transition-all [box-shadow:12px_12px_#66bb6a] hover:[box-shadow:4px_4px_#66bb6a] cursor-pointer"
 >
   <figure className="w-full h-full">
     <div
