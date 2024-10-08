@@ -38,7 +38,7 @@ console.log('posts', posts)
             isPremium={post.isPremium}
             upvoteCount={post.upvoteCount || 0}
             upvotedBy={post.upvotedBy || []}
-            userId={post.userId}
+            userId={post.userId || ''}
             updateTime={post.updatedAt ? new Date(post.updatedAt).toLocaleString() : 'Unknown Date'}
             comments={post.comments || []}
           />  

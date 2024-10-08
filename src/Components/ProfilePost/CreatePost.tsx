@@ -1,6 +1,6 @@
 'use client';
 import { useUser } from '@/hooks/user.hook';
-import { CreatePostRequest, useCreatePostMutation, useGetNewsFeedQuery, useGetPostsQuery } from '@/lib/api/postApi';
+import {  useCreatePostMutation, useGetNewsFeedQuery, useGetPostsQuery, useUpdatePostMutation } from '@/lib/api/postApi';
 import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import CardBone from '../Shared/CardBone';
@@ -23,7 +23,20 @@ const categories: string[] = [
   "Seasonal Gardening"
 ];
 
-const CreatePost = () => {
+interface CreatePostProps {
+  isEditing?: boolean;
+  postToEdit?: {
+    _id: string;
+    title: string;
+    content: string;
+    category: string;
+    isPremium: boolean;
+    link: string;
+  };
+  onClose?: () => void;
+}
+
+const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps) => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       Modal.setAppElement(document.body);
@@ -42,6 +55,18 @@ const CreatePost = () => {
   const {refetch: refetchNewsFeed} = useGetNewsFeedQuery()
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
+  const [updatePost] = useUpdatePostMutation();
+
+  useEffect(() => {
+    if (isEditing && postToEdit) {
+      setTitle(postToEdit.title);
+      setContent(postToEdit.content);
+      setCategory(postToEdit.category);
+      setIsPremium(postToEdit.isPremium);
+      setLink(postToEdit.link);
+      setIsModalOpen(true);
+    }
+  }, [isEditing, postToEdit]);
 
   // Handler for image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +94,12 @@ const CreatePost = () => {
 
 
     try {
-      const result = await createPost(formData).unwrap();
+      let result;
+      if (isEditing && postToEdit) {
+        result = await updatePost({ id: postToEdit._id, data: formData }).unwrap();
+      } else {
+        result = await createPost(formData).unwrap();
+      }
       
       if(result.success) {
         setTitle('');
@@ -81,9 +111,10 @@ const CreatePost = () => {
         setIsModalOpen(false); 
         refetch()
         refetchNewsFeed()
-        toast.success('Post created successfully');
+        toast.success(isEditing ? 'Post updated successfully' : 'Post created successfully');
+        if (onClose) onClose();
       } else {
-        toast.error('Failed to create post');
+        toast.error(isEditing ? 'Failed to update post' : 'Failed to create post');
       }
       
     } catch (error) {
@@ -94,7 +125,9 @@ const CreatePost = () => {
   return (
     <div>
       {/* Initial Input Field */}
-      <CardBone>
+    {
+      !isEditing && (
+        <CardBone>
         <div className="flex justify-start items-center gap-3 mb-5 pt-2">
           <Image
             src={userImage}
@@ -132,20 +165,30 @@ const CreatePost = () => {
           />
         </div>
       </CardBone>
+      )
+    }
 
       {/* Modal for Post Creation */}
       <Modal
-        isOpen={isModalOpen}
-        onRequestClose={handleCloseModal}
+          isOpen={isModalOpen}
+          onRequestClose={() => {
+            handleCloseModal();
+            if (onClose) onClose();
+          }}
         className="fixed inset-0 flex items-center justify-center z-50"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
         <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-auto">
           <div className="flex justify-between items-center border-b pb-2 mb-4">
-            <h2 className="text-xl font-semibold text-center">Create Post</h2>
-            <button onClick={handleCloseModal} className="text-gray-500">
+            <h2 className="text-xl font-semibold text-center"> {isEditing ? 'Edit Post' : 'Create Post'}</h2>
+
+            <button onClick={() => {
+              handleCloseModal();
+              if (onClose) onClose();
+            }} className="text-gray-500">
               X
             </button>
+
           </div>
 
           {/* Title Input */}
@@ -229,7 +272,7 @@ const CreatePost = () => {
           {/* Submit Button */}
           <CustomButton
             onClick={handlePostSubmit}
-            text="Post"
+            text={isEditing ? 'Update' : 'Post'}
             type="button"
             className="px-10 py-2 w-full bg-button-bg text-button-text hover:bg-button-hover rounded-lg mt-5"
           />

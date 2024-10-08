@@ -28,6 +28,12 @@ interface UpvoteRequest {
   userId: string;
 }
 
+export interface UpdatePostRequest {
+  id: string;
+  data: FormData;
+}
+
+
 export const postApi = createApi({ 
   reducerPath: 'postApi',
   baseQuery: fetchBaseQuery({
@@ -85,7 +91,15 @@ export const postApi = createApi({
         body: { content, userId },
       }),
     }),
+    updatePost: builder.mutation<PostResponse, UpdatePostRequest>({
+      query: ({ id, data }) => ({
+        url: `/posts/update/${id}`,
+        method: 'PUT',
+        body: data,
+        formData: true,
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation } = postApi;
