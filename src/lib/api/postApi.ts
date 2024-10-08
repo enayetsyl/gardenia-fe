@@ -9,6 +9,12 @@ export interface PostResponse {
   message: string;
 }
 
+interface CommentRequest {
+  postId: string;
+  content: string;
+  userId: string;
+}
+
 export interface NewsFeedResponse {
   success: boolean;
   data: NewsFeed[];
@@ -72,7 +78,14 @@ export const postApi = createApi({
         method: 'DELETE',
       }),
     }),
+    addComment: builder.mutation<PostResponse, CommentRequest>({
+      query: ({ postId, content, userId }) => ({
+        url: `/posts/addComment/${postId}`,
+        method: 'POST',
+        body: { content, userId },
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation } = postApi;

@@ -107,12 +107,12 @@ export interface User {
 }
 
 export type Comment = {
-  _id: string;
+  _id?: string;
   postId: string;
   userId: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type Post = {
@@ -125,10 +125,19 @@ export type Post = {
   userId: string;
   upvoteCount?: number; 
   upvotedBy?: string[]; 
-  comments?: Comment[]; 
+  comments?: LocalComment[]; 
   link?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+interface LocalComment {
+  _id: string;
+  content: string;
+  postId: string;
+  userId: User; 
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type NewsFeed = {
@@ -141,7 +150,7 @@ export type NewsFeed = {
   userId: User;
   upvoteCount?: number;
   upvotedBy?: string[];
-  comments?: Comment[];
+  comments?: LocalComment[];
   link?: string;
   createdAt: string;
   updatedAt: string;
