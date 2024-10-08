@@ -8,8 +8,8 @@ import { useUser } from '@/hooks/user.hook';
 import { useGetPostsQuery } from '@/lib/api/postApi';
 
 const ProfilePostSection: React.FC = () => {
-  const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
   const {user} = useUser();
+  const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
   const {data: posts, isLoading, refetch} = useGetPostsQuery(user?._id as string);
   if (isLoading) return <div>Loading...</div>;
 

@@ -1,11 +1,17 @@
 import envConfig from "@/config/envConfig";
-import { Post } from "@/type";
+import { NewsFeed, Post } from "@/type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from 'js-cookie';
 
 export interface PostResponse {
   success: boolean;
   data: Post[];
+  message: string;
+}
+
+export interface NewsFeedResponse {
+  success: boolean;
+  data: NewsFeed[];
   message: string;
 }
 
@@ -27,6 +33,9 @@ export const postApi = createApi({
     getPosts: builder.query<PostResponse, string>({
       query: (userId) => `/posts/getPosts/${userId}`,
     }),
+    getNewsFeed: builder.query<NewsFeedResponse, void>({ 
+      query: () => '/posts/getNewsFeed',
+    }),
     getUpvotes: builder.query<PostResponse, string>({
       query: (userId) => `/posts/getUpvote/${userId}`, 
     }),
@@ -41,4 +50,4 @@ export const postApi = createApi({
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery } = postApi;

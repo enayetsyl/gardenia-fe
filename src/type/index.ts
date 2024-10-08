@@ -130,3 +130,20 @@ export type Post = {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export type NewsFeed = {
+  _id: string;
+  title: string;
+  content: string;
+  images: string[];
+  category: string;
+  isPremium: boolean;
+  userId: User;
+  upvoteCount: number;
+  upvotedBy: string[];
+  comments: Comment[];
+  link: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
