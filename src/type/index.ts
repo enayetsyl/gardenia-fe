@@ -106,15 +106,27 @@ export interface User {
   isVerified: boolean;
 }
 
+export type Comment = {
+  _id: string;
+  postId: string;
+  userId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type Post = {
+  _id?: string; 
   title?: string;
   content?: string;
   images?: string[];
   category: string;
   isPremium?: boolean;
   userId: string;
-  upvotes?: number;
+  upvoteCount?: number; 
+  upvotedBy?: string[]; 
+  comments?: Comment[]; 
   link?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

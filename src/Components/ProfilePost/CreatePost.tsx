@@ -1,42 +1,94 @@
 'use client';
-import { useState } from 'react';
+import { useUser } from '@/hooks/user.hook';
+import { CreatePostRequest, useCreatePostMutation, useGetPostsQuery } from '@/lib/api/postApi';
+import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import CardBone from '../Shared/CardBone';
 import CustomButton from '../Shared/CustomButton';
 import userImage from '../../../public/user-profile-image-1.webp';
 import Image from 'next/image';
-import {
-  // FaAudible,
-  FaFileAudio,
-  // FaHeadphones,
-  FaImage,
-  FaVideo,
-} from 'react-icons/fa6';
+import { FaFileAudio, FaImage, FaVideo } from 'react-icons/fa6';
+import { toast } from 'react-hot-toast';
+
+const categories: string[] = [
+  "Vegetable Gardening",
+  "Flower Gardening",
+  "Herb Gardening",
+  "Fruit Gardening",
+  "Indoor Gardening",
+  "Landscaping",
+  "Succulents & Cacti",
+  "Container Gardening",
+  "Organic Gardening",
+  "Seasonal Gardening"
+];
 
 const CreatePost = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      Modal.setAppElement(document.body);
+    }
+  }, []);
+  const { user } = useUser(); 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [postContent, setPostContent] = useState('');
-  const [media, setMedia] = useState<File | null>(null);
-
-  // Handler for opening and closing modal
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [images, setImages] = useState<File[]>([]);
+  const [category, setCategory] = useState('');
+  const [isPremium, setIsPremium] = useState(false);
+  const [link, setLink] = useState('');
+  const [createPost] = useCreatePostMutation();
+  const {refetch} = useGetPostsQuery(user?._id || '')
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // Handler for file upload
-  const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event?.target?.files?.[0];
-    if (file) {
-      setMedia(file);
+  // Handler for image upload
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImages(Array.from(event.target.files));
     }
   };
 
   // Handler for post submission
-  const handlePostSubmit = () => {
-    // Add logic to handle post submission (e.g., saving to database)
-    setPostContent('');
-    setMedia(null);
-    setIsModalOpen(false);
+  const handlePostSubmit = async () => {
+    const formData = new FormData();
 
+    // Append basic post data
+    formData.append('category', category);
+    formData.append('userId', user?._id || '');
+    if (title.trim()) formData.append('title', title.trim());
+    if (content.trim()) formData.append('content', content.trim());
+    if (link.trim()) formData.append('link', link.trim());
+    formData.append('isPremium', isPremium.toString());
+
+    // Append images
+    images.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
+
+    console.log('FormData created:', formData);
+
+    try {
+      const result = await createPost(formData).unwrap();
+      console.log('result', result);
+      
+      if(result.success) {
+        setTitle('');
+        setContent('');
+        setImages([]);
+        setCategory('');
+        setIsPremium(false);
+        setLink('');
+        setIsModalOpen(false); 
+        refetch()
+        toast.success('Post created successfully');
+      } else {
+        toast.error('Failed to create post');
+      }
+      
+    } catch (error) {
+      console.error('Failed to create post:', error);
+    }
   };
 
   return (
@@ -96,44 +148,90 @@ const CreatePost = () => {
             </button>
           </div>
 
-          {/* Post Content Input */}
+          {/* Title Input */}
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Post Title"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
+          />
+
+          {/* Content Input */}
           <textarea
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             placeholder="What's on your mind?"
-            className="w-full h-32 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border"
+            className="w-full h-32 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
           ></textarea>
 
-          {/* Media Upload Section */}
-          <div className="mt-4">
+          {/* Category Select */}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+
+          {/* Image Upload Section */}
+          <div className="mb-4">
             <label
-              htmlFor="media-upload-input"
+              htmlFor="image-upload-input"
               className="flex items-center cursor-pointer text-primary"
             >
-              <span className="mr-2">Upload Photo/Video</span>
+              <span className="mr-2">Upload Images</span>
               <input
-                id="media-upload-input"
+                id="image-upload-input"
                 type="file"
-                accept="image/*, video/*, audio/*"
-                onChange={handleMediaUpload}
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
                 className="hidden"
               />
             </label>
           </div>
 
-          {/* Display Media Preview */}
-          {media && (
-            <p className="mt-2 text-sm text-gray-600">
-              Uploaded File: {(media as File).name}
+          {/* Display Image Preview */}
+          {images.length > 0 && (
+            <p className="mt-2 text-sm text-gray-600 mb-4">
+              Uploaded Images: {images.map(img => img.name).join(', ')}
             </p>
           )}
+
+          {/* Link Input */}
+          <input
+            type="url"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="Add a link"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
+          />
+
+          {/* Premium Post Checkbox */}
+          <div className="flex items-center mb-4">
+            <input
+              type="checkbox"
+              id="premium-checkbox"
+              checked={isPremium}
+              onChange={(e) => setIsPremium(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="premium-checkbox">Premium Post</label>
+          </div>
 
           {/* Submit Button */}
           <CustomButton
             onClick={handlePostSubmit}
             text="Post"
             type="button"
-            className="px-10 py-2 w-full bg-button-bg text-button-text hover:bg-button-hover rounded-lg mt-5 "
+            className="px-10 py-2 w-full bg-button-bg text-button-text hover:bg-button-hover rounded-lg mt-5"
           />
         </div>
       </Modal>

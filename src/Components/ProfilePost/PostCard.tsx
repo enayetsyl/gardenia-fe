@@ -15,11 +15,13 @@ interface PostCardProps {
   postTime: string;
   category: string;
   content?: string;
+  title?: string;
   media?: {
     type: 'image' | 'video';
     url: string;
   };
   link?: string;
+  isPremium?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -28,8 +30,10 @@ const PostCard: React.FC<PostCardProps> = ({
   postTime,
   category,
   content,
+  title,
   media,
   link,
+  isPremium,
 }) => {
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState<string[]>([]);
@@ -68,7 +72,7 @@ const PostCard: React.FC<PostCardProps> = ({
         <p className="mb-4">{content}</p>
 
         {media && (
-          <div className="mb-4">
+          <div className="mb-4 flex justify-center items-center">
             {media.type === 'image' ? (
               <Image
                 src={media.url}

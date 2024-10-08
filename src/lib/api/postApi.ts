@@ -9,6 +9,8 @@ export interface PostResponse {
   message: string;
 }
 
+export type CreatePostRequest = FormData;
+
 export const postApi = createApi({ 
   reducerPath: 'postApi',
   baseQuery: fetchBaseQuery({
@@ -22,13 +24,21 @@ export const postApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+    getPosts: builder.query<PostResponse, string>({
+      query: (userId) => `/posts/getPosts/${userId}`,
+    }),
     getUpvotes: builder.query<PostResponse, string>({
       query: (userId) => `/posts/getUpvote/${userId}`, 
-      
+    }),
+    createPost: builder.mutation<PostResponse, CreatePostRequest>({
+      query: (postData) => ({
+        url: '/posts/create',
+        method: 'POST',
+        body: postData,
+        formData: true, 
+      }),
     }),
   }),
 });
 
-export const { useGetUpvotesQuery } = postApi;
-
-
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation } = postApi;
