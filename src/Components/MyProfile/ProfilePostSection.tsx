@@ -3,7 +3,6 @@ import React from 'react';
 import CreatePost from '../ProfilePost/CreatePost';
 import PostCard from '../ProfilePost/PostCard';
 import userImage from '../../../public/user-profile-image-1.webp'
-import image1 from '../../../public/garden-1.jpg'
 import { useUser } from '@/hooks/user.hook';
 import { useGetPostsQuery } from '@/lib/api/postApi';
 
@@ -12,7 +11,6 @@ const ProfilePostSection: React.FC = () => {
   const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
   const {data: posts, isLoading} = useGetPostsQuery(user?._id as string);
   if (isLoading) return <div>Loading...</div>;
-  console.log('user inside profile post section', user);
 
   // Sort posts based on updatedAt field
   const sortedPosts = posts?.data
@@ -41,6 +39,8 @@ const ProfilePostSection: React.FC = () => {
             upvoteCount={post.upvoteCount || 0}
             upvotedBy={post.upvotedBy || []}
             userId={post.userId}
+            updateTime={post.updatedAt ? new Date(post.updatedAt).toLocaleString() : 'Unknown Date'}
+            comments={post.comments || []}
           />  
         ))}
       </div>

@@ -11,6 +11,7 @@ import FavoriteButton from '../Shared/FavoriteButton';
 import { useUpvotePostMutation, useRemoveUpvoteMutation, useGetNewsFeedQuery, useDeletePostMutation, useGetPostsQuery } from '@/lib/api/postApi';
 import { useUser } from '@/hooks/user.hook';
 import toast from 'react-hot-toast';
+import { Comment } from '@/type';
 
 interface PostCardProps {
   postId?: string;
@@ -29,6 +30,8 @@ interface PostCardProps {
   upvoteCount: number;
   upvotedBy: string[];
   userId: string;
+  updateTime: string;
+  comments: Comment[];
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -44,10 +47,12 @@ const PostCard: React.FC<PostCardProps> = ({
   isPremium,
   upvoteCount,
   upvotedBy,
-  userId
+  userId,
+  updateTime,
+  comments
 }) => {
-  const [likes, setLikes] = useState(0);
-  const [comments, setComments] = useState<string[]>([]);
+  // const [likes, setLikes] = useState(0);
+  // const [comments, setComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState('');
   const [favorites, setFavorites] = useState(0);
   const [upvotePost] = useUpvotePostMutation();
@@ -110,7 +115,6 @@ const PostCard: React.FC<PostCardProps> = ({
   };
 
   const handleDelete = async () => {
-    console.log('Delete post with ID:', postId);
     try {
       await deletePost(postId as string);
       toast.success('Post deleted successfully');
@@ -118,7 +122,6 @@ const PostCard: React.FC<PostCardProps> = ({
       refetchProfile();
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error deleting post:', error);
       toast.error('Error deleting post');
     }
   };
@@ -225,9 +228,9 @@ const PostCard: React.FC<PostCardProps> = ({
           />
         </form>
         <div className="mt-4">
-          {comments.map((comment, index) => (
+          {comments?.map((comment, index) => (
             <p key={index} className="text-sm text-gray-700 mb-2">
-              {comment}
+              {comment.content}
             </p>
           ))}
         </div>
