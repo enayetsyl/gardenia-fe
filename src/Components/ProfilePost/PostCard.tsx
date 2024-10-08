@@ -27,6 +27,7 @@ interface PostCardProps {
   isPremium?: boolean;
   upvoteCount: number;
   upvotedBy: string[];
+  userId: string;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
