@@ -11,7 +11,7 @@ import { useGetUpvotesQuery } from '@/lib/api/postApi';
 const ProfileHeader = () => {
   const { user } = useUser();
   const { data : upvotes } = useGetUpvotesQuery(user?._id as string);
- 
+  console.log('user inside profile header', user);
   return (
     <div>
       <CoverPhotoSection />

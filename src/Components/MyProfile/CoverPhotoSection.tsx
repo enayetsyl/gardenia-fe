@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 
 const CoverPhotoSection = () => {
   const { user, refetchUser } = useUser();
+  
 
   const [uploadCoverImage] = useUploadCoverImageMutation();
 

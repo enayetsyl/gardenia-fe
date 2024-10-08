@@ -8,8 +8,9 @@ import Link from 'next/link';
 import LikeButton from '../Shared/LikeButton';
 import CommentButton from '../Shared/CommentButton';
 import FavoriteButton from '../Shared/FavoriteButton';
-import { useUpvotePostMutation, useRemoveUpvoteMutation, useGetNewsFeedQuery } from '@/lib/api/postApi';
+import { useUpvotePostMutation, useRemoveUpvoteMutation, useGetNewsFeedQuery, useDeletePostMutation, useGetPostsQuery } from '@/lib/api/postApi';
 import { useUser } from '@/hooks/user.hook';
+import toast from 'react-hot-toast';
 
 interface PostCardProps {
   postId?: string;
@@ -53,6 +54,8 @@ const PostCard: React.FC<PostCardProps> = ({
   const [removeUpvote] = useRemoveUpvoteMutation();
   const { user } = useUser();
   const { refetch } = useGetNewsFeedQuery();
+  const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
+  const [deletePost] = useDeletePostMutation();
 
   const isLiked = user && upvotedBy?.includes(user?._id);
   const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
@@ -106,9 +109,18 @@ const PostCard: React.FC<PostCardProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log('Delete post with ID:', postId);
-    setIsModalOpen(false);
+    try {
+      await deletePost(postId as string);
+      toast.success('Post deleted successfully');
+      refetch();
+      refetchProfile();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast.error('Error deleting post');
+    }
   };
 
   return (
@@ -160,6 +172,8 @@ const PostCard: React.FC<PostCardProps> = ({
             )
           }
         </div>
+
+        <p className="mb-4">{content}</p>
 
         {media && (
           <div className="mb-4 flex justify-center items-center">
