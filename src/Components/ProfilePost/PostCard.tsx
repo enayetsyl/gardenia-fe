@@ -211,7 +211,7 @@ const PostCard: React.FC<PostCardProps> = ({
               {postTime} · {category}
             </div>
           </div>
-          {userId._id === user?._id && (
+          {typeof userId === 'object' && userId._id === user?._id &&  (
             <div className="relative ml-auto">
               <button
                 className="text-xl font-bold"
