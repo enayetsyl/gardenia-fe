@@ -133,16 +133,16 @@ export type Post = {
 
 export type NewsFeed = {
   _id: string;
-  title: string;
-  content: string;
-  images: string[];
+  title?: string;
+  content?: string;
+  images?: string[];
   category: string;
-  isPremium: boolean;
+  isPremium?: boolean;
   userId: User;
-  upvoteCount: number;
-  upvotedBy: string[];
-  comments: Comment[];
-  link: string;
+  upvoteCount?: number;
+  upvotedBy?: string[];
+  comments?: Comment[];
+  link?: string;
   createdAt: string;
   updatedAt: string;
 }

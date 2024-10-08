@@ -13,7 +13,6 @@ const ProfilePostSection: React.FC = () => {
   const {data: posts, isLoading, refetch} = useGetPostsQuery(user?._id as string);
   if (isLoading) return <div>Loading...</div>;
 
-  console.log('posts', posts?.data);
 
   // Sort posts based on updatedAt field
   const sortedPosts = posts?.data
@@ -29,6 +28,7 @@ const ProfilePostSection: React.FC = () => {
         {sortedPosts?.map((post) => (
           <PostCard
             key={post._id}
+            postId={post._id}
             userImage={userImageSrc}
             userName={user?.name || 'Unknown User'}
             postTime={post.createdAt ? new Date(post.createdAt).toLocaleString() : 'Unknown Date'}
@@ -38,7 +38,9 @@ const ProfilePostSection: React.FC = () => {
             media={post.images && post.images.length > 0 ? { type: 'image', url: post.images[0] } : undefined}
             link={post.link}
             isPremium={post.isPremium}
-          />
+            upvoteCount={post.upvoteCount || 0}
+            upvotedBy={post.upvotedBy || []}
+          />  
         ))}
       </div>
     </div>

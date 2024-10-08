@@ -26,7 +26,6 @@ const CoverPhotoSection = () => {
 
   try {
     const result = await uploadCoverImage({ userId: user._id as string, image: file }).unwrap();
-    console.log('result', result);
     if (result?.data?.coverImage) {
       setCoverPhoto(result.data.coverImage);
       await refetchUser();
@@ -36,7 +35,6 @@ const CoverPhotoSection = () => {
       toast.error('Failed to update cover photo');
     }
   } catch (error) {
-    console.log('error', error);
       toast.error('Failed to update cover photo');
     }
   };

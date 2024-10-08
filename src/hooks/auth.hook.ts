@@ -56,7 +56,6 @@ export const useAuth = () => {
       const res = await forgetPassword(formData).unwrap();
       if (res.success) {
         toast.success('Password reset email sent');
-        // console.log('Password reset email sent', res);
       }
     } catch (error: any) {
       toast.error(`${error.data.message}`);

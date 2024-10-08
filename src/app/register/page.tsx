@@ -19,7 +19,6 @@ const Register = () => {
 
   const handleRegisterUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('form data', formData);
     handleRegister(formData);
   };
 

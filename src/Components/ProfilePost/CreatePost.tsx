@@ -1,6 +1,6 @@
 'use client';
 import { useUser } from '@/hooks/user.hook';
-import { CreatePostRequest, useCreatePostMutation, useGetPostsQuery } from '@/lib/api/postApi';
+import { CreatePostRequest, useCreatePostMutation, useGetNewsFeedQuery, useGetPostsQuery } from '@/lib/api/postApi';
 import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import CardBone from '../Shared/CardBone';
@@ -39,6 +39,7 @@ const CreatePost = () => {
   const [link, setLink] = useState('');
   const [createPost] = useCreatePostMutation();
   const {refetch} = useGetPostsQuery(user?._id || '')
+  const {refetch: refetchNewsFeed} = useGetNewsFeedQuery()
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -66,11 +67,9 @@ const CreatePost = () => {
       formData.append(`images`, image);
     });
 
-    console.log('FormData created:', formData);
 
     try {
       const result = await createPost(formData).unwrap();
-      console.log('result', result);
       
       if(result.success) {
         setTitle('');
@@ -81,6 +80,7 @@ const CreatePost = () => {
         setLink('');
         setIsModalOpen(false); 
         refetch()
+        refetchNewsFeed()
         toast.success('Post created successfully');
       } else {
         toast.error('Failed to create post');

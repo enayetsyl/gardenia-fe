@@ -11,24 +11,28 @@ const NewsFeed = () => {
   
   if(isNewsFeedLoading) return <Loading/>
 
-  console.log('Latest news item:', sortedNewsFeed)
   return (
     <div>
       <div className='pt-10 space-y-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
-        {sortedNewsFeed?.map((post:NewsFeedType) => (
-          <PostCard
-            key={post?._id}
-            userImage={post?.userId?.userImage}
-            userName={post?.userId?.name || 'Unknown User'}
-            postTime={post.createdAt ? new Date(post.createdAt).toLocaleString() : 'Unknown Date'}
-            category={post.category}
-            content={post.content}
-            title={post.title}
-            media={post.images && post.images.length > 0 ? { type: 'image', url: post.images[0] } : undefined}
-            link={post.link}
-            isPremium={post.isPremium}
-          />
-        ))}
+      {sortedNewsFeed?.map((post:NewsFeedType) => {
+          return (
+            <PostCard
+              key={post?._id}
+              postId={post?._id}
+              userImage={post?.userId?.userImage}
+              userName={post?.userId?.name || 'Unknown User'}
+              postTime={post.createdAt ? new Date(post.createdAt).toLocaleString() : 'Unknown Date'}
+              category={post.category}
+              content={post.content}
+              title={post.title}
+              media={post.images && post.images.length > 0 ? { type: 'image', url: post.images[0] } : undefined}
+              link={post.link}
+              isPremium={post.isPremium}
+              upvoteCount={post.upvoteCount || 0}
+              upvotedBy={post.upvotedBy || []}
+            />
+          );
+        })}
       </div>
     </div>
   )

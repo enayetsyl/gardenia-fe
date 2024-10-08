@@ -17,6 +17,11 @@ export interface NewsFeedResponse {
 
 export type CreatePostRequest = FormData;
 
+interface UpvoteRequest {
+  postId: string;
+  userId: string;
+}
+
 export const postApi = createApi({ 
   reducerPath: 'postApi',
   baseQuery: fetchBaseQuery({
@@ -47,7 +52,21 @@ export const postApi = createApi({
         formData: true, 
       }),
     }),
+    upvotePost: builder.mutation<PostResponse, UpvoteRequest>({
+      query: ({ postId, userId }) => ({
+        url: `/posts/upvote/${postId}`,
+        method: 'POST',
+        body: { userId },
+      }),
+    }),
+    removeUpvote: builder.mutation<PostResponse, UpvoteRequest>({
+      query: ({ postId, userId }) => ({
+        url: `/posts/removeUpvote/${postId}`,
+        method: 'POST',
+        body: { userId },
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation } = postApi;

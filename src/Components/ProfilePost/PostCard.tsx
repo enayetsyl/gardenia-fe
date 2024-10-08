@@ -8,8 +8,14 @@ import Link from 'next/link';
 import LikeButton from '../Shared/LikeButton';
 import CommentButton from '../Shared/CommentButton';
 import FavoriteButton from '../Shared/FavoriteButton';
+import { useUpvotePostMutation, useRemoveUpvoteMutation, useGetNewsFeedQuery } from '@/lib/api/postApi';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/lib/store'; // Make sure this path is correct
+import { useAuth } from '@/hooks/auth.hook';
+import { useUser } from '@/hooks/user.hook';
 
 interface PostCardProps {
+  postId?: string;
   userImage: string;
   userName: string;
   postTime: string;
@@ -22,9 +28,12 @@ interface PostCardProps {
   };
   link?: string;
   isPremium?: boolean;
+  upvoteCount: number;
+  upvotedBy: string[];
 }
 
 const PostCard: React.FC<PostCardProps> = ({
+  postId,
   userImage,
   userName,
   postTime,
@@ -34,13 +43,41 @@ const PostCard: React.FC<PostCardProps> = ({
   media,
   link,
   isPremium,
+  upvoteCount,
+  upvotedBy,
 }) => {
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState('');
   const [favorites, setFavorites] = useState(0);
-  const handleLike = () => {
-    setLikes(likes + 1);
+  const [upvotePost] = useUpvotePostMutation();
+  const [removeUpvote] = useRemoveUpvoteMutation();
+  const { user } = useUser();
+  const {refetch}= useGetNewsFeedQuery()
+
+  const isLiked = user && upvotedBy?.includes(user?._id);
+  const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
+
+  const handleLike = async () => {
+  
+    if (!user || !postId) {
+      console.error('User or postId is undefined', { user, postId });
+      return;
+    }
+    try {
+      if (isLiked) {
+        await removeUpvote({ postId, userId: user._id }).unwrap();
+        setLocalLikeCount((prev) => prev - 1);
+        refetch()
+      } else {
+        await upvotePost({ postId, userId: user._id }).unwrap();
+        setLocalLikeCount((prev) => prev + 1);
+        refetch()
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Optionally, show an error message to the user
+    }
   };
 
   const handleCommentSubmit = () => {
@@ -49,7 +86,6 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleFavorite = () => {
     setFavorites(favorites + 1);
   };
-
   return (
     <CardBone>
       <div className=" p-4 mb-4">
@@ -99,7 +135,7 @@ const PostCard: React.FC<PostCardProps> = ({
         )}
 
         <div className="flex justify-center items-center space-x-8 mb-4">
-          <LikeButton onClick={handleLike} likes={likes} />
+          <LikeButton onClick={handleLike} likes={localLikeCount} isLiked={isLiked || false} />
           <CommentButton
             onClick={handleCommentSubmit}
             comments={comments.length}
