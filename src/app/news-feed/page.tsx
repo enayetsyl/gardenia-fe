@@ -30,6 +30,7 @@ const NewsFeed = () => {
               isPremium={post.isPremium}
               upvoteCount={post.upvoteCount || 0}
               upvotedBy={post.upvotedBy || []}
+              userId={post.userId?._id}
             />
           );
         })}

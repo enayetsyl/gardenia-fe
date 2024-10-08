@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import CardBone from '../Shared/CardBone';
 import CustomInput from '../Shared/CustomInput';
@@ -9,9 +9,6 @@ import LikeButton from '../Shared/LikeButton';
 import CommentButton from '../Shared/CommentButton';
 import FavoriteButton from '../Shared/FavoriteButton';
 import { useUpvotePostMutation, useRemoveUpvoteMutation, useGetNewsFeedQuery } from '@/lib/api/postApi';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/lib/store'; // Make sure this path is correct
-import { useAuth } from '@/hooks/auth.hook';
 import { useUser } from '@/hooks/user.hook';
 
 interface PostCardProps {
@@ -45,6 +42,7 @@ const PostCard: React.FC<PostCardProps> = ({
   isPremium,
   upvoteCount,
   upvotedBy,
+  userId
 }) => {
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState<string[]>([]);
@@ -53,13 +51,12 @@ const PostCard: React.FC<PostCardProps> = ({
   const [upvotePost] = useUpvotePostMutation();
   const [removeUpvote] = useRemoveUpvoteMutation();
   const { user } = useUser();
-  const {refetch}= useGetNewsFeedQuery()
+  const { refetch } = useGetNewsFeedQuery();
 
   const isLiked = user && upvotedBy?.includes(user?._id);
   const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
 
   const handleLike = async () => {
-  
     if (!user || !postId) {
       console.error('User or postId is undefined', { user, postId });
       return;
@@ -68,11 +65,11 @@ const PostCard: React.FC<PostCardProps> = ({
       if (isLiked) {
         await removeUpvote({ postId, userId: user._id }).unwrap();
         setLocalLikeCount((prev) => prev - 1);
-        refetch()
+        refetch();
       } else {
         await upvotePost({ postId, userId: user._id }).unwrap();
         setLocalLikeCount((prev) => prev + 1);
-        refetch()
+        refetch();
       }
     } catch (error) {
       console.error('Error toggling like:', error);
@@ -86,9 +83,36 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleFavorite = () => {
     setFavorites(favorites + 1);
   };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setIsModalOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleEdit = () => {
+    console.log('Edit post details');
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log('Delete post with ID:', postId);
+    setIsModalOpen(false);
+  };
+
   return (
     <CardBone>
-      <div className=" p-4 mb-4">
+      <div className="p-4 mb-4 relative">
         <div className="flex items-center mb-4">
           <Image
             src={userImage}
@@ -103,9 +127,38 @@ const PostCard: React.FC<PostCardProps> = ({
               {postTime} · {category}
             </div>
           </div>
+          {
+            userId === user?._id && (
+              <div className="relative ml-auto">
+            <button
+              className="text-xl font-bold"
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              ...
+            </button>
+            {isModalOpen && (
+              <div
+                ref={modalRef}
+                className="absolute top-4 right-5 ml-2 bg-background-dark border rounded shadow-lg z-10 p-2"
+              >
+                <ul className='flex flex-col gap-2'>
+                  <CustomButton
+                    text="Edit"
+                    className="px-5 py-2 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer w-full"
+                    onClick={handleEdit}
+                  />
+                  <CustomButton
+                    text="Delete"
+                    className="px-5 py-2 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer w-full"
+                    onClick={handleDelete}
+                  />
+                </ul>
+              </div>
+            )}
+          </div>
+            )
+          }
         </div>
-
-        <p className="mb-4">{content}</p>
 
         {media && (
           <div className="mb-4 flex justify-center items-center">

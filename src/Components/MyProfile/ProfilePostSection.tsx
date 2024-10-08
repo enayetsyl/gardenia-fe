@@ -10,7 +10,7 @@ import { useGetPostsQuery } from '@/lib/api/postApi';
 const ProfilePostSection: React.FC = () => {
   const {user} = useUser();
   const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
-  const {data: posts, isLoading, refetch} = useGetPostsQuery(user?._id as string);
+  const {data: posts, isLoading} = useGetPostsQuery(user?._id as string);
   if (isLoading) return <div>Loading...</div>;
 
 
@@ -40,6 +40,7 @@ const ProfilePostSection: React.FC = () => {
             isPremium={post.isPremium}
             upvoteCount={post.upvoteCount || 0}
             upvotedBy={post.upvotedBy || []}
+            userId={post.userId}
           />  
         ))}
       </div>
