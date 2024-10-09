@@ -106,9 +106,9 @@ export const postApi = createApi({
     }),
     updateComment: builder.mutation<void, { postId: string; commentId: string; content: string }>({
       query: ({ postId, commentId, content }) => ({
-        url: `/posts/${postId}/comments/${commentId}`,
+        url: `/posts/updateComment/${postId}`,
         method: 'PUT',
-        body: { content },
+        body: { content, commentId },
       }),
     }),
   }),
