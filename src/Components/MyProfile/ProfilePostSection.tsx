@@ -5,12 +5,13 @@ import PostCard from '../ProfilePost/PostCard';
 import userImage from '../../../public/user-profile-image-1.webp'
 import { useUser } from '@/hooks/user.hook';
 import { useGetPostsQuery } from '@/lib/api/postApi';
+import Loading from '../Shared/Loading';
 
 const ProfilePostSection: React.FC = () => {
   const {user} = useUser();
   const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
   const {data: posts, isLoading} = useGetPostsQuery(user?._id as string);
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading/>
   // Sort posts based on updatedAt field
   const sortedPosts = posts?.data
     ? [...posts.data].sort((a, b) =>
@@ -21,7 +22,9 @@ const ProfilePostSection: React.FC = () => {
   return (
     <div>
       <CreatePost />
-      <div className='pt-10 space-y-5'>
+      {
+        isLoading ? <Loading/> : (
+          <div className='pt-10 space-y-5'>
         {sortedPosts?.map((post) => (
           <PostCard
             key={post._id}
@@ -43,6 +46,8 @@ const ProfilePostSection: React.FC = () => {
           />  
         ))}
       </div>
+        )
+      }
     </div>
   );
 };

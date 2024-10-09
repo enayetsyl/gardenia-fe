@@ -50,7 +50,7 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
   const [category, setCategory] = useState('');
   const [isPremium, setIsPremium] = useState(false);
   const [link, setLink] = useState('');
-  const [createPost] = useCreatePostMutation();
+  const [createPost, {isLoading: isCreatePostLoading}] = useCreatePostMutation();
   const {refetch} = useGetPostsQuery(user?._id || '')
   const {refetch: refetchNewsFeed} = useGetNewsFeedQuery()
   const handleOpenModal = () => setIsModalOpen(true);
@@ -77,8 +77,8 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
 
   // Handler for post submission
   const handlePostSubmit = async () => {
+    if(!category) return toast.error('Please select a category')
     const formData = new FormData();
-
     // Append basic post data
     formData.append('category', category);
     formData.append('userId', user?._id || '');
@@ -274,7 +274,8 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
             onClick={handlePostSubmit}
             text={isEditing ? 'Update' : 'Post'}
             type="button"
-            className="px-10 py-2 w-full bg-button-bg text-button-text hover:bg-button-hover rounded-lg mt-5"
+            disabled={isCreatePostLoading}
+            className={`px-10 py-2 w-full bg-button-bg text-button-text hover:bg-button-hover rounded-lg mt-5 ${isCreatePostLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           />
         </div>
       </Modal>

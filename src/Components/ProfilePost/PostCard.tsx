@@ -248,15 +248,23 @@ const PostCard: React.FC<PostCardProps> = ({
         {media && (
           <div className="mb-4 flex justify-center items-center">
             {media.type === 'image' ? (
+              <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
               <Image
                 src={media.url}
                 alt="Post media"
-                width={500}
-                height={300}
-                className="rounded-lg"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="rounded-lg object-cover"
               />
+            </div>
             ) : (
-              <video src={media.url} controls className="w-full rounded-lg" />
+              <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
+        <video 
+          src={media.url} 
+          controls 
+          className="w-full h-full rounded-lg object-cover"
+        />
+      </div>
             )}
           </div>
         )}
