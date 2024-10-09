@@ -132,7 +132,7 @@ const PostCard: React.FC<PostCardProps> = ({
         content: newComment.trim(),
         userId: user._id || '',
       }).unwrap();
-      console.log('comment response', response);
+      ('comment response', response);
       if (response.success) {
         toast.success('Comment added successfully');
         setNewComment('');

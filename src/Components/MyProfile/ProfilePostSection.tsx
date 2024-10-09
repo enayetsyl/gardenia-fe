@@ -11,7 +11,6 @@ const ProfilePostSection: React.FC = () => {
   const userImageSrc = typeof userImage === 'string' ? userImage : userImage.src;
   const {data: posts, isLoading} = useGetPostsQuery(user?._id as string);
   if (isLoading) return <div>Loading...</div>;
-console.log('posts', posts)
   // Sort posts based on updatedAt field
   const sortedPosts = posts?.data
     ? [...posts.data].sort((a, b) =>

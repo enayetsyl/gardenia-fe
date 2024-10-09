@@ -5,7 +5,6 @@ import { useGetNewsFeedQuery } from "@/lib/api/postApi"
 import { NewsFeed as NewsFeedType } from "@/type"
 const NewsFeed = () => {
   const {data:newsFeed, isLoading: isNewsFeedLoading} = useGetNewsFeedQuery()
-  console.log('newsFeed', newsFeed);
 
   const sortedNewsFeed = newsFeed?.data
   ? [...newsFeed.data].sort((a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime()) : []

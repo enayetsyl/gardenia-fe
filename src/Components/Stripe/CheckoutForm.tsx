@@ -5,8 +5,9 @@ import { StripeCardElementOptions } from '@stripe/stripe-js';
 import toast from 'react-hot-toast';
 import CustomButton from '../Shared/CustomButton';
 import Link from 'next/link';
+import { useGetCurrentUserQuery } from '@/lib/api/authApi';
 
-const CheckoutForm: React.FC = () => {
+const CheckoutForm: React.FC<{ userId: string }> = ({ userId }) => {
   const [error, setError] = useState<string>('');
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState<string>('');
@@ -14,6 +15,7 @@ const CheckoutForm: React.FC = () => {
   const stripe = useStripe();
   const [price] = useState<number>(5);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { refetch: currentUserRefetch} = useGetCurrentUserQuery(userId as string);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,6 +89,19 @@ const CheckoutForm: React.FC = () => {
         if (paymentIntent.status === 'succeeded') {
           setTransactionId(paymentIntent.id);
           toast.success('Payment successful!');
+
+          await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/users/verify-account`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId,
+              amount: price,
+              transactionId: paymentIntent.id,
+            }),
+          });
+          currentUserRefetch();
         }
       }
     } catch (error) {
