@@ -33,7 +33,6 @@ export interface UpdatePostRequest {
   data: FormData;
 }
 
-
 export const postApi = createApi({ 
   reducerPath: 'postApi',
   baseQuery: fetchBaseQuery({
@@ -99,7 +98,20 @@ export const postApi = createApi({
         formData: true,
       }),
     }),
+    deleteComment: builder.mutation<void, { postId: string; commentId: string }>({
+      query: ({ postId, commentId }) => ({
+        url: `/posts/delete/${postId}/comments/${commentId}`,
+        method: 'DELETE',
+      }),
+    }),
+    updateComment: builder.mutation<void, { postId: string; commentId: string; content: string }>({
+      query: ({ postId, commentId, content }) => ({
+        url: `/posts/${postId}/comments/${commentId}`,
+        method: 'PUT',
+        body: { content },
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation } = postApi;

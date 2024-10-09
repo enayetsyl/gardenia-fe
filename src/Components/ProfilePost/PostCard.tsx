@@ -15,6 +15,8 @@ import {
   useDeletePostMutation,
   useGetPostsQuery,
   useAddCommentMutation,
+  useDeleteCommentMutation,
+  useUpdateCommentMutation,
 } from '@/lib/api/postApi';
 import { useUser } from '@/hooks/user.hook';
 import toast from 'react-hot-toast';
@@ -79,12 +81,17 @@ const PostCard: React.FC<PostCardProps> = ({
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
   const [deletePost] = useDeletePostMutation();
   const [addComment] = useAddCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
+  const [updateComment] = useUpdateCommentMutation();
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editedCommentContent, setEditedCommentContent] = useState('');
   const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
   const isLiked = user && upvotedBy?.includes(user?._id || '');
   const [isEditing, setIsEditing] = useState(false);
   const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const [openCommentModal, setOpenCommentModal] = useState<string | null>(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -180,6 +187,50 @@ const PostCard: React.FC<PostCardProps> = ({
     }
   };
 
+  const handleCommentEdit = (commentId: string, content: string) => {
+    setEditingCommentId(commentId);
+    setEditedCommentContent(content);
+    setIsCommentOpen(true);
+  };
+
+  const handleCommentDelete = async (commentId: string) => {
+    console.log('postId', postId);
+    console.log('commentId', commentId);
+    try {
+      await deleteComment({ postId: postId as string, commentId }).unwrap();
+      toast.success('Comment deleted successfully');
+      refetch();
+      refetchProfile();
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      toast.error('Failed to delete comment');
+    }
+  };
+
+  const handleCommentUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCommentId || !editedCommentContent.trim()) return;
+
+    try {
+      await updateComment({
+        postId: postId as string,
+        commentId: editingCommentId,
+        content: editedCommentContent.trim(),
+      }).unwrap();
+      toast.success('Comment updated successfully');
+      setEditingCommentId(null);
+      setEditedCommentContent('');
+      refetch();
+      refetchProfile();
+    } catch (error) {
+      console.error('Error updating comment:', error);
+      toast.error('Failed to update comment');
+    }
+  };
+
+  const toggleCommentModal = (commentId: string) => {
+    setOpenCommentModal(prevId => prevId === commentId ? null : commentId);
+  };
 
   return (
     <CardBone>
@@ -294,23 +345,34 @@ const PostCard: React.FC<PostCardProps> = ({
         </div>
 
         {isCommentOpen && (
-          <form onSubmit={handleCommentSubmit} className="flex items-center">
+          <form onSubmit={editingCommentId ? handleCommentUpdate : handleCommentSubmit} className="flex items-center">
             <CustomInput
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Write a comment..."
+              value={editingCommentId ? editedCommentContent : newComment}
+              onChange={(e) => editingCommentId ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
+              placeholder={editingCommentId ? "Edit your comment..." : "Write a comment..."}
               className="flex-grow mr-2 p-2 border rounded-lg"
             />
             <CustomButton
               type="submit"
-              text="Post"
+              text={editingCommentId ? "Update" : "Post"}
               className="bg-button-bg hover:bg-button-hover text-button-text px-4 py-2 rounded-lg"
             />
+            {editingCommentId && (
+              <CustomButton
+                type="button"
+                text="Cancel"
+                onClick={() => {
+                  setEditingCommentId(null);
+                  setEditedCommentContent('');
+                }}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg ml-2"
+              />
+            )}
           </form>
         )}
         <div className="mt-4 space-y-3">
-          {comments?.map((comment, index) => (
-            <div key={index} className="flex justify-start items-center gap-2">
+          {comments?.map((comment) => (
+            <div key={comment._id} className="flex justify-start items-start gap-2 relative">
               <div className="">
                 <Image
                   src={comment.userId.userImage}
@@ -320,10 +382,44 @@ const PostCard: React.FC<PostCardProps> = ({
                   className="rounded-full"
                 />
               </div>
-              <div>
+              <div className="flex-grow">
                 <p className="font-bold">{comment.userId.name}</p>
                 <p>{comment.content}</p>
               </div>
+              {user?._id === comment.userId._id && (
+                <div className="relative">
+                  <button
+                    className="text-xl font-bold"
+                    onClick={() => toggleCommentModal(comment._id)}
+                  >
+                    ...
+                  </button>
+                  {openCommentModal === comment._id && (
+                    <div
+                      className="absolute top-6 right-0 bg-background-dark border rounded shadow-lg z-10 p-2"
+                    >
+                      <ul className="flex flex-col gap-2">
+                        <CustomButton
+                          text="Edit"
+                          className="px-5 py-2 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer w-full"
+                          onClick={() => {
+                            handleCommentEdit(comment._id, comment.content);
+                            toggleCommentModal(comment._id);
+                          }}
+                        />
+                        <CustomButton
+                          text="Delete"
+                          className="px-5 py-2 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer w-full"
+                          onClick={() => {
+                            handleCommentDelete(comment._id);
+                            toggleCommentModal(comment._id);
+                          }}
+                        />
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
