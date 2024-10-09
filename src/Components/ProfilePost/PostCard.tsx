@@ -20,6 +20,7 @@ import { useUser } from '@/hooks/user.hook';
 import toast from 'react-hot-toast';
 import { User } from '@/type';
 import CreatePost from './CreatePost';
+import { useGetCurrentUserQuery } from '@/lib/api/authApi';
 
 interface LocalComment {
   _id: string;
@@ -78,6 +79,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
   const [deletePost] = useDeletePostMutation();
   const [addComment] = useAddCommentMutation();
+  const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
   const isLiked = user && upvotedBy?.includes(user?._id || '');
   const [isEditing, setIsEditing] = useState(false);
   const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
@@ -95,6 +97,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const handleLike = async () => {
     if (!user || !postId) {
+      toast.error('You must be logged in to like a post');
       console.error('User or postId is undefined', { user, postId });
       return;
     }
@@ -103,10 +106,12 @@ const PostCard: React.FC<PostCardProps> = ({
         await removeUpvote({ postId, userId: user._id || '' }).unwrap();
         setLocalLikeCount((prev) => prev - 1);
         refetch();
+        currentUserRefetch();
       } else {
         await upvotePost({ postId, userId: user._id || '' }).unwrap();
         setLocalLikeCount((prev) => prev + 1);
         refetch();
+        currentUserRefetch();
       }
     } catch (error) {
       console.error('Error toggling like:', error);
@@ -117,6 +122,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !postId || !newComment.trim()) {
+      toast.error('You must be logged in to comment on a post');
       return;
     }
 
@@ -175,10 +181,6 @@ const PostCard: React.FC<PostCardProps> = ({
     }
   };
 
-  console.log('user inside post card', user)
-  console.log('user id', userId)
-  console.log('user _id', user?._id)
-  console.log('user id match', user?._id === userId)
 
   return (
     <CardBone>
