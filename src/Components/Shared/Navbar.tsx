@@ -2,19 +2,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import userImage from '../../../public/user-placeholder-image.jpg';
 import { NavItem } from '@/type';
 import { navItems } from '@/constant';
 import { useUser } from '@/hooks/user.hook';
-import { clearUser, setUser } from '@/lib/features/UserState/UserSlice';
+// import { clearUser, setUser } from '@/lib/features/UserState/UserSlice';
 import { useDispatch } from 'react-redux';
 import { useAuth } from '@/hooks/auth.hook';
 
-interface User {
-  name: string;
-  image: StaticImageData;
-}
+// interface User {
+//   name: string;
+//   image: StaticImageData;
+// }
 
 // Mock user state (replace with actual auth logic)
 // const useUser = () => {
@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-background-light rounded-lg shadow-neomorphic py-3 z-10">
                   <Link
-                    href="/my-profile"
+                    href={`/my-profile/${user._id}`}
                     className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 shadow-neomorphic"
                   >
                     My Profile
@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
         { user ? (
           <>
             <Link
-              href="/my-profile"
+              href={`/my-profile/${user._id}`}
               className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md mb-2 transition-all duration-300 shadow-neomorphic hover:shadow-neomorphic-inset"
             >
               My Profile

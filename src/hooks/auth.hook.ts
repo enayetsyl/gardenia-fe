@@ -35,9 +35,9 @@ export const useAuth = () => {
       const res = await loginUser(userData).unwrap();
       if (res.success) {
         toast.success('Login successful');
-        router.push('/my-profile');
+        router.push(`/my-profile/${res.data.user._id}`);
         dispatch(setUser(res.data.user));
-        await router.push('/my-profile');
+        // await router.push('/my-profile');
       }
     } catch (error: any) {
       console.error('Login error:', error);
