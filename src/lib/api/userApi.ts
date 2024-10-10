@@ -24,6 +24,16 @@ export interface ProfilePhotosResponse {
   statusCode: number;
 }
 
+export interface UpdateUserDetailsRequest {
+  userId: string;
+  details: {
+    study?: string;
+    location?: string;
+    maritalStatus?: string;
+    website?: string;
+  };
+}
+
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
@@ -72,7 +82,21 @@ export const userApi = createApi({
     getProfilePhotos: builder.query<ProfilePhotosResponse, { userId: string }>({
       query: ({ userId }) => `/users/profile-photos/${userId}`,
     }),
+    updateUserBio: builder.mutation<UserResponse, { userId: string; bio: string }>({
+      query: ({ userId, bio }) => ({
+        url: `/users/update-bio/${userId}`,
+        method: 'PUT',
+        body: { bio },
+      }),
+    }),
+    updateUserDetails: builder.mutation<UserResponse, UpdateUserDetailsRequest>({
+      query: ({ userId, details }) => ({
+        url: `/users/update-details/${userId}`,
+        method: 'PUT',
+        body: details,
+      }),
+    }),
   }),
 });
 
-export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery, useGetProfilePhotosQuery } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery, useGetProfilePhotosQuery, useUpdateUserBioMutation, useUpdateUserDetailsMutation, } = userApi;

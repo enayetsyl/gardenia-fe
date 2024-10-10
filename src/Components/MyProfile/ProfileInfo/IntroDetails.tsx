@@ -5,28 +5,28 @@ import Link from 'next/link';
 import { FaGraduationCap } from 'react-icons/fa6';
 import { FaLocationDot } from 'react-icons/fa6';
 import { FaHeart } from 'react-icons/fa';
-import { PiRssBold } from 'react-icons/pi';
 import { TbWorld } from 'react-icons/tb';
+import { useUpdateUserDetailsMutation } from '@/lib/api/userApi';
+import { useUser } from '@/hooks/user.hook';
 
 type Details = {
   study: string;
   location: string;
   maritalStatus: string;
-  followers: string;
   website: string;
 };
 
 const IntroDetails = () => {
+  const {user} = useUser()
   // Initial details data
   const [details, setDetails] = useState<Details>({
-    study: 'Programming Hero',
-    location: 'Sylhet',
-    maritalStatus: 'Married',
-    followers: '329 people',
-    website: 'https://md-enayetur-rahman-portfolio.vercel.app/',
+    study: user?.study || '',
+    location: user?.location || '',
+    maritalStatus: user?.maritalStatus || '',
+    website: user?.website || '',
   });
-
   const [isEditing, setIsEditing] = useState(false);
+  const [updateUserDetails, { isLoading }] = useUpdateUserDetailsMutation();
   const [editableDetails, setEditableDetails] = useState<Details>(details);
 
   // Handle input changes
@@ -39,9 +39,23 @@ const IntroDetails = () => {
   };
 
   // Save edited details
-  const handleSave = () => {
-    setDetails(editableDetails);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const result = await updateUserDetails({
+        userId: user?._id || "",
+        details: editableDetails,
+      }).unwrap();
+      
+      if (result.success) {
+        setDetails(editableDetails);
+        setIsEditing(false);
+      } else {
+        // Handle error
+        console.error('Failed to update user details:', result.message);
+      }
+    } catch (error) {
+      console.error('An error occurred while updating user details:', error);
+    }
   };
 
   return (
@@ -81,28 +95,7 @@ const IntroDetails = () => {
             />
           </div>
 
-          <div className="mb-2">
-            <label className="block">Followers:</label>
-            <input
-              type="text"
-              name="followers"
-              value={editableDetails.followers}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-            />
-          </div>
-
-          {/* <div className="mb-2">
-            <label className="block">LinkedIn:</label>
-            <input
-              type="text"
-              name="linkedin"
-              value={editableDetails?.linkedin}
-              onChange={handleChange}
-              className="w-full p-2 border rounded-md"
-            />
-          </div> */}
-
+         
           <div className="mb-2">
             <label className="block">Website:</label>
             <input
@@ -119,7 +112,7 @@ const IntroDetails = () => {
               text="Save"
               type="button"
               onClick={handleSave}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              className="px-4 py-2 bg-button-bg hover:bg-button-hover text-button-text font-semibold rounded-md"
             />
           </div>
         </div>
@@ -144,12 +137,7 @@ const IntroDetails = () => {
             <p>{details.maritalStatus}</p>
           </div>
 
-          <div className="flex justify-start items-center gap-3">
-            <PiRssBold className="text-2xl" />
-            <p className="text-sm">
-              Followed by <strong>{details.followers}</strong>
-            </p>
-          </div>
+          
 
           <div className="flex justify-start items-center gap-3">
             <TbWorld className="text-2xl" />

@@ -109,6 +109,11 @@ export interface User {
   followingCount?: number;
   followersId?: string[];
   followingId?: string[];
+  bio?: string;
+  study?: string;
+  location?: string;
+  maritalStatus?: string;
+  website?: string;
 }
 
 export type Comment = {

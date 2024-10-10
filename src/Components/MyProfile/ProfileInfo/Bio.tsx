@@ -1,22 +1,36 @@
 'use client';
 import CustomButton from '@/Components/Shared/CustomButton';
 import { useState } from 'react';
+import { useUpdateUserBioMutation } from '@/lib/api/userApi';
+import { useUser } from '@/hooks/user.hook';
 
 const Bio = () => {
-  const [bio, setBio] = useState(
-    'Tech enthusiast and aspiring web developer, weaving creativity into every line of code.'
-  );
+  const {user} = useUser()
+  const [bio, setBio] = useState(user?.bio || '');
   const [isEditing, setIsEditing] = useState(false);
   const [newBio, setNewBio] = useState(bio);
   const maxLength = 100;
+  const [updateUserBio, { isLoading }] = useUpdateUserBioMutation();
 
   const handleEdit = () => {
     setIsEditing(true);
+    setNewBio(user?.bio || '');
   };
 
-  const handleSave = () => {
-    setBio(newBio);
-    setIsEditing(false);
+  const handleSave = async () => {
+    if (user?._id) {
+      try {
+        const response = await updateUserBio({ userId: user._id, bio: newBio }).unwrap();
+        if (response.success) {
+          setBio(newBio);
+          setIsEditing(false);
+        } else {
+          console.error('Failed to update bio:', response.message);
+        }
+      } catch (error) {
+        console.error('Error updating bio:', error);
+      }
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,12 +56,14 @@ const Bio = () => {
               text="Cancel"
               type="button"
               onClick={() => setIsEditing(false)}
+              disabled={isLoading}
             />
             <CustomButton
               className="px-4 py-2 bg-button-bg text-button-text hover:bg-button-hover font-semibold rounded-md"
-              text="Save"
+              text={isLoading ? 'Saving...' : 'Save'}
               type="button"
               onClick={handleSave}
+              disabled={isLoading}
             />
           </div>
         </div>
