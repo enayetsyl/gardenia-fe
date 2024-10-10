@@ -1,5 +1,6 @@
 'use client'
 import PostCard from "@/Components/ProfilePost/PostCard"
+import CustomContainer from "@/Components/Shared/CustomContainer"
 import Loading from "@/Components/Shared/Loading"
 import { useGetNewsFeedQuery } from "@/lib/api/postApi"
 import { NewsFeed as NewsFeedType } from "@/type"
@@ -13,6 +14,9 @@ const NewsFeed = () => {
 
   return (
     <div>
+      <CustomContainer>
+
+     
       <div className='pt-10 space-y-5 grid grid-cols-1 lg:grid-cols-2 gap-5'>
       {sortedNewsFeed?.map((post:NewsFeedType) => {
           return (
@@ -30,13 +34,16 @@ const NewsFeed = () => {
               isPremium={post.isPremium}
               upvoteCount={post.upvoteCount || 0}
               upvotedBy={post.upvotedBy || []}
-              userId={post.userId?._id || ''}
+              userId={post.userId}
               updateTime={post.updatedAt ? new Date(post.updatedAt).toLocaleString() : 'Unknown Date'}
               comments={post.comments || []}
+              favoritedBy={post.favoritedBy || []}
+              favoriteCount={post.favoriteCount || 0}
             />
           );
         })}
       </div>
+      </CustomContainer>
     </div>
   )
 }

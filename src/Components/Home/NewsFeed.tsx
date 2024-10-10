@@ -56,13 +56,15 @@ const NewsFeed = () => {
                     isPremium={post.isPremium}
                     upvoteCount={post.upvoteCount || 0}
                     upvotedBy={post.upvotedBy || []}
-                    userId={post.userId?._id || ''}
+                    userId={post.userId}
                     updateTime={
                       post.updatedAt
                         ? new Date(post.updatedAt).toLocaleString()
                         : 'Unknown Date'
                     }
                     comments={post.comments || []}
+                    favoritedBy={post.favoritedBy || []}
+                    favoriteCount={post.favoriteCount || 0}
                   />
                 );
               })}

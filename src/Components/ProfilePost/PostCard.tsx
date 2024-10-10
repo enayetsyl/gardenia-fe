@@ -17,6 +17,8 @@ import {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useUpdateCommentMutation,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
 } from '@/lib/api/postApi';
 import { useUser } from '@/hooks/user.hook';
 import toast from 'react-hot-toast';
@@ -49,9 +51,11 @@ interface PostCardProps {
   isPremium?: boolean;
   upvoteCount: number;
   upvotedBy: string[];
-  userId: string | User;
+  userId:  User;
   updateTime: string;
   comments: LocalComment[];
+  favoritedBy: string[];
+  favoriteCount: number;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -70,6 +74,8 @@ const PostCard: React.FC<PostCardProps> = ({
   userId,
   updateTime,
   comments,
+  favoritedBy,
+  favoriteCount
 }) => {
   const [newComment, setNewComment] = useState('');
   const [isCommentOpen, setIsCommentOpen] = useState(false);
@@ -81,14 +87,18 @@ const PostCard: React.FC<PostCardProps> = ({
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
   const [deletePost] = useDeletePostMutation();
   const [addComment] = useAddCommentMutation();
+  const [addFavorite, { isLoading: isAddingFavorite }] = useAddFavoriteMutation();
+  const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
   const isLiked = user && upvotedBy?.includes(user?._id || '');
+  const isFavorited = user && favoritedBy?.includes(user?._id || '');
   const [isEditing, setIsEditing] = useState(false);
   const [localLikeCount, setLocalLikeCount] = useState(upvoteCount);
+  const [localFavoritesCount, setLocalFavoritesCount] = useState(favoriteCount);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [openCommentModal, setOpenCommentModal] = useState<string | null>(null);
@@ -155,8 +165,31 @@ const PostCard: React.FC<PostCardProps> = ({
     setIsCommentOpen(true);
   };
 
-  const handleFavorite = () => {
-    setFavorites(favorites + 1);
+  const handleFavorite = async() => {
+    // setFavorites(favorites + 1);
+    if (!user || !postId) {
+      toast.error('You must be logged in to add a post in your favorites');
+      console.error('User or postId is undefined', { user, postId });
+      return;
+    }
+    try {
+      if (isFavorited) {
+        await removeFavorite({ postId, userId: user._id || '' }).unwrap();
+        setLocalFavoritesCount((prev) => prev - 1);
+        toast.success('Post removed from favorites');
+        refetch();
+        currentUserRefetch();
+      } else {
+        await addFavorite({ postId, userId: user._id || '' }).unwrap();
+        setLocalFavoritesCount((prev) => prev + 1);
+        refetch();
+        currentUserRefetch();
+        toast.success('Post added to favorites');
+      }
+    } catch (error) {
+      console.error('Error toggling favorites:', error);
+      // Optionally, show an error message to the user
+    }
   };
 
   useEffect(() => {
@@ -341,7 +374,14 @@ const PostCard: React.FC<PostCardProps> = ({
             onClick={handleCommentClick}
             comments={comments.length}
           />
-          <FavoriteButton onClick={handleFavorite} favorites={favorites} />
+          {
+            userId?._id !== user?._id && (
+              <FavoriteButton onClick={handleFavorite} favorites={localFavoritesCount}
+              isFavorited={isFavorited || false}
+              isLoading={isAddingFavorite || isRemovingFavorite}
+              />
+            )
+          }
         </div>
 
         {isCommentOpen && (

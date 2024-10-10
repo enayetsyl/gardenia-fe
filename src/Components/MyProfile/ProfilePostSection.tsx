@@ -6,6 +6,7 @@ import userImage from '../../../public/user-profile-image-1.webp'
 import { useUser } from '@/hooks/user.hook';
 import { useGetPostsQuery } from '@/lib/api/postApi';
 import Loading from '../Shared/Loading';
+import { User } from '@/type';
 
 const ProfilePostSection: React.FC = () => {
   const {user} = useUser();
@@ -40,9 +41,11 @@ const ProfilePostSection: React.FC = () => {
             isPremium={post.isPremium}
             upvoteCount={post.upvoteCount || 0}
             upvotedBy={post.upvotedBy || []}
-            userId={post.userId || ''}
+            userId={post.userId as unknown as User}
             updateTime={post.updatedAt ? new Date(post.updatedAt).toLocaleString() : 'Unknown Date'}
             comments={post.comments || []}
+            favoritedBy={post.favoritedBy || []}
+            favoriteCount={post.favoriteCount || 0}
           />  
         ))}
       </div>

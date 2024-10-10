@@ -77,6 +77,20 @@ export const postApi = createApi({
         body: { userId },
       }),
     }),
+    addFavorite: builder.mutation<PostResponse, UpvoteRequest>({
+      query: ({ postId, userId }) => ({
+        url: `/posts/addFavorite/${postId}`,
+        method: 'POST',
+        body: { userId },
+      }),
+    }),
+    removeFavorite: builder.mutation<PostResponse, UpvoteRequest>({
+      query: ({ postId, userId }) => ({
+        url: `/posts/removeFavorite/${postId}`,
+        method: 'POST',
+        body: { userId },
+      }),
+    }),
     deletePost: builder.mutation<PostResponse, string>({
       query: (postId) => ({
         url: `/posts/delete/${postId}`,
@@ -114,4 +128,4 @@ export const postApi = createApi({
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation } = postApi;

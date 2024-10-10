@@ -129,6 +129,8 @@ export type Post = {
   link?: string;
   createdAt?: string;
   updatedAt?: string;
+  favoritedBy?: string[];
+  favoriteCount?: number;
 }
 
 interface LocalComment {
@@ -154,5 +156,7 @@ export type NewsFeed = {
   link?: string;
   createdAt: string;
   updatedAt: string;
+  favoritedBy?: string[];
+  favoriteCount?: number;
 }
 
