@@ -104,6 +104,7 @@ export interface User {
   coverImage: string;
   passwordChangedAt: string;
   isVerified: boolean;
+  favoritePosts: string[];
 }
 
 export type Comment = {

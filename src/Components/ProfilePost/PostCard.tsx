@@ -79,13 +79,13 @@ const PostCard: React.FC<PostCardProps> = ({
 }) => {
   const [newComment, setNewComment] = useState('');
   const [isCommentOpen, setIsCommentOpen] = useState(false);
-  const [favorites, setFavorites] = useState(0);
-  const [upvotePost] = useUpvotePostMutation();
-  const [removeUpvote] = useRemoveUpvoteMutation();
   const { user } = useUser();
   const { refetch } = useGetNewsFeedQuery();
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
+  const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
   const [deletePost] = useDeletePostMutation();
+  const [upvotePost] = useUpvotePostMutation();
+  const [removeUpvote] = useRemoveUpvoteMutation();
   const [addComment] = useAddCommentMutation();
   const [addFavorite, { isLoading: isAddingFavorite }] = useAddFavoriteMutation();
   const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
@@ -93,7 +93,6 @@ const PostCard: React.FC<PostCardProps> = ({
   const [updateComment] = useUpdateCommentMutation();
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState('');
-  const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
   const isLiked = user && upvotedBy?.includes(user?._id || '');
   const isFavorited = user && favoritedBy?.includes(user?._id || '');
   const [isEditing, setIsEditing] = useState(false);
@@ -179,11 +178,13 @@ const PostCard: React.FC<PostCardProps> = ({
         toast.success('Post removed from favorites');
         refetch();
         currentUserRefetch();
+        refetchProfile();
       } else {
         await addFavorite({ postId, userId: user._id || '' }).unwrap();
         setLocalFavoritesCount((prev) => prev + 1);
         refetch();
         currentUserRefetch();
+        refetchProfile();
         toast.success('Post added to favorites');
       }
     } catch (error) {
