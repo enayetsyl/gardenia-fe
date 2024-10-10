@@ -12,7 +12,6 @@ const FavoritePosts = () => {
   const { data: postData, isLoading } = useGetSinglePostQuery(selectedPostId as string, {
     skip: !selectedPostId, // Skip querying until a post is selected
   });
-  console.log('postData', postData?.data)
   const handleOpenPost = async (postId: string) => {
     setSelectedPostId(postId);
     setLoadingPostId(postId);
@@ -25,7 +24,7 @@ const FavoritePosts = () => {
   return (
     <div>
       <CardBone>
-        <h1>Favorite Posts</h1>
+        <h1 className="font-bold text-lg">Favorite Posts</h1>
         <div>
           {
             user?.favoritePosts?.map((post: string) => {
