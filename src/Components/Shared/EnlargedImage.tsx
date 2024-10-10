@@ -1,10 +1,10 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import React from 'react';
 import { FaSearchMinus, FaSearchPlus, FaTimes } from 'react-icons/fa';
 import { FaArrowLeft, FaArrowRight, FaExpand } from 'react-icons/fa6';
 
 type EnlargedImageProps = {
-  image: StaticImageData;
+  image: string | undefined;
   onClose: () => void;
   onNext: () => void;
   onPrev: () => void;
@@ -12,7 +12,7 @@ type EnlargedImageProps = {
   onZoomIn: () => void;
   onZoomOut: () => void;
   onFullScreen: () => void;
-  className?: string; // Add className prop here
+  className?: string; 
 };
 
 const EnlargedImage: React.FC<EnlargedImageProps> = ({
@@ -55,13 +55,15 @@ const EnlargedImage: React.FC<EnlargedImageProps> = ({
           id="lightbox-image"
           className="flex justify-center items-center h-full"
         >
-          <Image
-            src={image}
-            alt="Enlarged"
-            height={600 * zoomLevel}
-            width={800 * zoomLevel}
-            className="object-contain"
-          />
+          {image && (
+            <Image
+              src={image}
+              alt="Enlarged"
+              height={600 * zoomLevel}
+              width={800 * zoomLevel}
+              className="object-contain"
+            />
+          )}
         </div>
       </div>
     </div>

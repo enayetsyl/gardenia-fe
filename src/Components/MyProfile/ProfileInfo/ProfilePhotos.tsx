@@ -10,6 +10,8 @@ import photos2 from '../../../../public/garden-2.jpg';
 import photos3 from '../../../../public/garden-3.jpg';
 import photos4 from '../../../../public/garden-4.jpg';
 import EnlargedImage from '@/Components/Shared/EnlargedImage';
+import { useUser } from '@/hooks/user.hook';
+import { useGetProfilePhotosQuery } from '@/lib/api/userApi';
 
 function ProfilePhotos() {
   const photos = [photos1, photos2, photos3, photos4];
@@ -17,6 +19,9 @@ function ProfilePhotos() {
   const [isEnlargeImageOpen, setIsEnlargeImageOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const {user} = useUser();
+  const {data: profilePhotos} = useGetProfilePhotosQuery({userId: user?._id as string});
+  console.log('profile photos', profilePhotos);
 
   useEffect(() => {
     // Check if the element exists before setting the app element
@@ -78,7 +83,7 @@ function ProfilePhotos() {
           />
         </div>
         <div className="grid grid-cols-3 gap-2 h-full">
-          {photos.slice(0, 3).map((photo, index) => (
+          {profilePhotos?.data?.slice(0, 3).map((photo, index) => (
             <Image
               key={index}
               src={photo}
@@ -113,7 +118,7 @@ function ProfilePhotos() {
           <div className="grid grid-cols-3 gap-4 py-4">
             {' '}
             {/* Added gap and padding */}
-            {photos.map((photo, index) => (
+            {profilePhotos?.data?.map((photo, index) => (
               <Image
                 key={index}
                 src={photo}
@@ -131,7 +136,7 @@ function ProfilePhotos() {
       {/* EnlargeImage to display the enlarged image */}
       {isEnlargeImageOpen  && (
         <EnlargedImage
-          image={photos[currentImageIndex]}
+          image={profilePhotos?.data[currentImageIndex] }
           onClose={() => setIsEnlargeImageOpen(false)}
           onNext={handleNextImage}
           onPrev={handlePrevImage}

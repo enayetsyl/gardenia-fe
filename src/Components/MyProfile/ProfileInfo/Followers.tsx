@@ -6,36 +6,15 @@ import { FaTimes } from 'react-icons/fa';
 import CustomButton from '@/Components/Shared/CustomButton';
 import Modal from 'react-modal';
 import followerImage1 from '../../../../public/user-placeholder-image.jpg';
-import followerImage2 from '../../../../public/user-profile-image-2.jpg';
-import followerImage3 from '../../../../public/user-profile-image-3.jpg';
-import { StaticImageData } from 'next/image';
 import { useUser } from '@/hooks/user.hook';
 import { useGetFollowersQuery } from '@/lib/api/userApi';
-import { User } from '@/type';
 
-type Follower = {
-  name: string;
-  photo: StaticImageData;
-};
-// Dummy data for followers
-const followersData: Follower[] = [
-  { name: 'Digontha Das', photo: followerImage1 },
-  { name: 'নাঈম মুক্তাকিম', photo: followerImage2 },
-  { name: 'Al Emran', photo: followerImage3 },
-  { name: 'Md Robiul Munshi', photo: followerImage1 },
-  { name: 'Golam Morshed', photo: followerImage2 },
-  { name: 'Jabir Ahmed', photo: followerImage3 },
-  { name: 'MD Mahamudul Hasan', photo: followerImage1 },
-  { name: 'Shajahan Ahmed', photo: followerImage2 },
-  { name: 'Azim Sumon', photo: followerImage3 },
-];
 
 const Followers = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {user} = useUser();
-  const {data: followers, isLoading} = useGetFollowersQuery({userId: user?._id as string});
+  const {data: followers} = useGetFollowersQuery({userId: user?._id as string});
 
-  console.log('followers', followers);
   useEffect(() => {
     const appElement = document.getElementById('__next');
     if (appElement) {

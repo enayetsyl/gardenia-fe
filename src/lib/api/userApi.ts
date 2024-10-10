@@ -17,6 +17,13 @@ export interface FollowersResponse {
   statusCode: number;
 }
 
+export interface ProfilePhotosResponse {
+  success: boolean;
+  data: string[];
+  message: string;
+  statusCode: number;
+}
+
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
@@ -62,7 +69,10 @@ export const userApi = createApi({
     getFollowers: builder.query<FollowersResponse, { userId: string }>({
       query: ({ userId }) => `/users/followers/${userId}`,
     }),
+    getProfilePhotos: builder.query<ProfilePhotosResponse, { userId: string }>({
+      query: ({ userId }) => `/users/profile-photos/${userId}`,
+    }),
   }),
 });
 
-export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery, useGetProfilePhotosQuery } = userApi;
