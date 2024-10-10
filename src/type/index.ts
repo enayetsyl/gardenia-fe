@@ -123,7 +123,7 @@ export type Post = {
   images?: string[];
   category: string;
   isPremium?: boolean;
-  userId: string;
+  userId: User;
   upvoteCount?: number; 
   upvotedBy?: string[]; 
   comments?: LocalComment[]; 

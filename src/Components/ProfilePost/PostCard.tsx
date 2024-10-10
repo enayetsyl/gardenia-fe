@@ -266,6 +266,7 @@ const PostCard: React.FC<PostCardProps> = ({
     setOpenCommentModal(prevId => prevId === commentId ? null : commentId);
   };
 
+
   return (
     <CardBone>
       {isEditing && (

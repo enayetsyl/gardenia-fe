@@ -12,6 +12,7 @@ const NewsFeed = () => {
   
   if(isNewsFeedLoading) return <Loading/>
 
+
   return (
     <div>
       <CustomContainer>

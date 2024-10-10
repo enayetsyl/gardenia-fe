@@ -9,6 +9,12 @@ export interface PostResponse {
   message: string;
 }
 
+export interface SinglePostResponse {
+  success: boolean;
+  data: Post;
+  message: string;
+}
+
 interface CommentRequest {
   postId: string;
   content: string;
@@ -48,6 +54,9 @@ export const postApi = createApi({
   endpoints: (builder) => ({
     getPosts: builder.query<PostResponse, string>({
       query: (userId) => `/posts/getPosts/${userId}`,
+    }),
+    getSinglePost: builder.query<SinglePostResponse, string>({
+      query: (postId) => `/posts/getSinglePost/${postId}`,
     }),
     getNewsFeed: builder.query<NewsFeedResponse, void>({ 
       query: () => '/posts/getNewsFeed',
@@ -128,4 +137,4 @@ export const postApi = createApi({
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation, useGetSinglePostQuery } = postApi;
