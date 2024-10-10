@@ -12,6 +12,7 @@ const NewsFeed = () => {
   
   if(isNewsFeedLoading) return <Loading/>
 
+  console.log('newsFeed page', sortedNewsFeed);
 
   return (
     <div>

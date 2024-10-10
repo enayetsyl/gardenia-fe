@@ -20,6 +20,7 @@ const ProfilePostSection: React.FC = () => {
       )
     : [];
 
+  console.log('profile page', sortedPosts);
   return (
     <div>
       <CreatePost />

@@ -25,6 +25,7 @@ import toast from 'react-hot-toast';
 import { User } from '@/type';
 import CreatePost from './CreatePost';
 import { useGetCurrentUserQuery } from '@/lib/api/authApi';
+import { useFollowUserMutation } from '@/lib/api/userApi';
 
 interface LocalComment {
   _id: string;
@@ -101,6 +102,9 @@ const PostCard: React.FC<PostCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [openCommentModal, setOpenCommentModal] = useState<string | null>(null);
+  const [isHoveringUsername, setIsHoveringUsername] = useState(false);
+  const [followUser] = useFollowUserMutation();
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -266,6 +270,38 @@ const PostCard: React.FC<PostCardProps> = ({
     setOpenCommentModal(prevId => prevId === commentId ? null : commentId);
   };
 
+  const handleFollowUser = async () => {
+    if (!user || !userId) {
+      toast.error('You must be logged in to follow a user');
+      return;
+    }
+    console.log('user._id', user._id);
+    console.log('userId._id', userId._id);
+    try {
+      await followUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+      toast.success(`You are now following ${userName}`);
+      // Optionally refetch user data or update local state
+    } catch (error: unknown) {
+      if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
+        toast.error(`${error.data.message}`);
+      } else {
+        toast.error('An error occurred while following the user');
+      }
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setIsHoveringUsername(true);
+  };
+
+  const handleMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHoveringUsername(false);
+    }, 300); 
+  };
 
   return (
     <CardBone>
@@ -292,11 +328,38 @@ const PostCard: React.FC<PostCardProps> = ({
             height={40}
             className="rounded-full mr-3"
           />
-          <div>
-            <h3 className="font-bold">{userName}</h3>
+          <div 
+            className="relative"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <h3 className="font-bold cursor-pointer">
+              {userName}
+            </h3>
             <div className="text-sm text-gray-500">
               {postTime} · {category}
             </div>
+            {isHoveringUsername && user?._id !== userId._id && (
+              <div className="absolute top-full left-0 mt-1 bg-background-dark border rounded shadow-lg z-10 p-3">
+                <div className="flex flex-col gap-2">
+                  <div className='flex justify-center items-center gap-2 mb-3'>
+                    <Image
+                      src={userId.userImage}
+                      alt={userId.name}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                    <h3 className="font-bold">{userId.name}</h3>
+                  </div>
+                  <CustomButton
+                    text="Follow"
+                    className="px-3 py-1 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer"
+                    onClick={handleFollowUser}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           {typeof userId === 'object' && userId._id === user?._id &&  (
             <div className="relative ml-auto">

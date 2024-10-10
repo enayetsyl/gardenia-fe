@@ -19,6 +19,7 @@ const NewsFeed = () => {
       )
     : [];
 
+  console.log('sortedNewsFeed', sortedNewsFeed);
   // if(isNewsFeedLoading) return <Loading/>
   return (
     <div className="bg-background-dark">

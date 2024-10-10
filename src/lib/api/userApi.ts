@@ -46,7 +46,14 @@ export const userApi = createApi({
         };
       },
     }),
+    followUser: builder.mutation<UserResponse, { followerId: string; followedId: string }>({
+      query: ({ followerId, followedId }) => ({
+        url: '/users/follow',
+        method: 'POST',
+        body: { followerId, followedId },
+      }),
+    }),
   }),
 });
 
-export const { useUploadUserImageMutation, useUploadCoverImageMutation } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation } = userApi;

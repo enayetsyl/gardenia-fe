@@ -105,6 +105,10 @@ export interface User {
   passwordChangedAt: string;
   isVerified: boolean;
   favoritePosts: string[];
+  followerCount?: number;
+  followingCount?: number;
+  followersId?: string[];
+  followingId?: string[];
 }
 
 export type Comment = {
