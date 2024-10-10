@@ -10,6 +10,12 @@ export interface UserResponse {
   message: string;
   statusCode: number;
 }
+export interface FollowersResponse {
+  success: boolean;
+  data: User[];
+  message: string;
+  statusCode: number;
+}
 
 export const userApi = createApi({
   reducerPath: 'userApi',
@@ -53,7 +59,10 @@ export const userApi = createApi({
         body: { followerId, followedId },
       }),
     }),
+    getFollowers: builder.query<FollowersResponse, { userId: string }>({
+      query: ({ userId }) => `/users/followers/${userId}`,
+    }),
   }),
 });
 
-export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery } = userApi;
