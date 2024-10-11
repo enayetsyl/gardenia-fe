@@ -5,6 +5,7 @@ import PostCard from "@/Components/ProfilePost/PostCard";
 import CustomContainer from "@/Components/Shared/CustomContainer";
 import Loading from "@/Components/Shared/Loading";
 import { NewsFeed as NewsFeedType } from '@/type';
+import CustomInput from '@/Components/Shared/CustomInput';
 
 // Gardening categories
 const categories: string[] = [
@@ -88,18 +89,19 @@ const NewsFeed = () => {
       <CustomContainer>
         <div className="pt-10">
           {/* Search and Filter UI */}
-          <input
-            type="text"
-            placeholder="Search posts..."
+          <CustomInput
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="border p-2 rounded w-full mb-5"
+            placeholder="Search posts..."
+            type="text"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
           />
+          
 
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="border p-2 rounded w-full mb-5"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
           >
             <option value="">All Categories</option>
             {categories.map((cat) => (
