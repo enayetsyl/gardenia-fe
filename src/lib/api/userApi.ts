@@ -76,6 +76,13 @@ export const userApi = createApi({
         body: { followerId, followedId },
       }),
     }),
+    unfollowUser: builder.mutation<UserResponse, { followerId: string; followedId: string }>({
+      query: ({ followerId, followedId }) => ({
+        url: '/users/unfollow',
+        method: 'POST',
+        body: { followerId, followedId },
+      }),
+    }),
     getFollowers: builder.query<FollowersResponse, { userId: string }>({
       query: ({ userId }) => `/users/followers/${userId}`,
     }),
@@ -99,4 +106,4 @@ export const userApi = createApi({
   }),
 });
 
-export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery, useGetProfilePhotosQuery, useUpdateUserBioMutation, useUpdateUserDetailsMutation, } = userApi;
+export const { useUploadUserImageMutation, useUploadCoverImageMutation, useFollowUserMutation, useGetFollowersQuery, useGetProfilePhotosQuery, useUpdateUserBioMutation, useUpdateUserDetailsMutation, useUnfollowUserMutation } = userApi;

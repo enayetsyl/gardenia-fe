@@ -25,7 +25,7 @@ import toast from 'react-hot-toast';
 import { User } from '@/type';
 import CreatePost from './CreatePost';
 import { useGetCurrentUserQuery } from '@/lib/api/authApi';
-import { useFollowUserMutation } from '@/lib/api/userApi';
+import { useFollowUserMutation, useUnfollowUserMutation } from '@/lib/api/userApi';
 
 interface LocalComment {
   _id: string;
@@ -92,6 +92,8 @@ const PostCard: React.FC<PostCardProps> = ({
   const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
+  const [followUser] = useFollowUserMutation();
+  const [unfollowUser] = useUnfollowUserMutation();
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editedCommentContent, setEditedCommentContent] = useState('');
   const isLiked = user && upvotedBy?.includes(user?._id || '');
@@ -103,8 +105,14 @@ const PostCard: React.FC<PostCardProps> = ({
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [openCommentModal, setOpenCommentModal] = useState<string | null>(null);
   const [isHoveringUsername, setIsHoveringUsername] = useState(false);
-  const [followUser] = useFollowUserMutation();
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  useEffect(() => {
+    if (user && user.followingId?.includes(userId._id || '')) {
+      setIsFollowing(true);
+    }
+  }, [user, userId._id]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -278,15 +286,17 @@ const PostCard: React.FC<PostCardProps> = ({
     console.log('user._id', user._id);
     console.log('userId._id', userId._id);
     try {
-      await followUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
-      toast.success(`You are now following ${userName}`);
-      // Optionally refetch user data or update local state
-    } catch (error: unknown) {
-      if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
-        toast.error(`${error.data.message}`);
+      if (isFollowing) {
+        await unfollowUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        toast.success(`You have unfollowed ${userName}`);
+        setIsFollowing(false);
       } else {
-        toast.error('An error occurred while following the user');
+        await followUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        toast.success(`You are now following ${userName}`);
+        setIsFollowing(true);
       }
+    } catch (error) {
+      toast.error('An error occurred while following/unfollowing the user');
     }
   };
 
@@ -353,8 +363,10 @@ const PostCard: React.FC<PostCardProps> = ({
                     <h3 className="font-bold">{userId.name}</h3>
                   </div>
                   <CustomButton
-                    text="Follow"
-                    className="px-3 py-1 bg-button-bg text-button-text hover:bg-button-hover rounded-lg cursor-pointer"
+                    text={isFollowing ? "Unfollow" : "Follow"}
+                    className={`px-3 py-1 ${
+                      isFollowing ? 'bg-secondary-dark text-white' : 'bg-button-bg text-white'
+                    } hover:bg-opacity-75 rounded-lg cursor-pointer`}
                     onClick={handleFollowUser}
                   />
                 </div>
