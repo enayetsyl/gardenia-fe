@@ -55,6 +55,9 @@ export const postApi = createApi({
     getPosts: builder.query<PostResponse, string>({
       query: (userId) => `/posts/getPosts/${userId}`,
     }),
+    getUserSpecificPosts: builder.query<PostResponse, string>({
+      query: (userId) => `/posts/getUserSpecificPosts/${userId}`,
+    }),
     getSinglePost: builder.query<SinglePostResponse, string>({
       query: (postId) => `/posts/getSinglePost/${postId}`,
     }),
@@ -140,7 +143,11 @@ export const postApi = createApi({
         params: { search, category, page },
       }),
     }),
+
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation, useGetSinglePostQuery, useSearchAndFilterPostsQuery } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation, useGetSinglePostQuery, useSearchAndFilterPostsQuery,
+useGetUserSpecificPostsQuery
+
+} = postApi;

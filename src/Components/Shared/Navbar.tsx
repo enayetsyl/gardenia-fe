@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
 
 
   const handleLogin = () => {
-    console.log('login button clicked')
+    
     router.push('/login');
   };
 

@@ -240,8 +240,7 @@ const PostCard: React.FC<PostCardProps> = ({
   };
 
   const handleCommentDelete = async (commentId: string) => {
-    console.log('postId', postId);
-    console.log('commentId', commentId);
+    
     try {
       await deleteComment({ postId: postId as string, commentId }).unwrap();
       toast.success('Comment deleted successfully');
@@ -283,8 +282,7 @@ const PostCard: React.FC<PostCardProps> = ({
       toast.error('You must be logged in to follow a user');
       return;
     }
-    console.log('user._id', user._id);
-    console.log('userId._id', userId._id);
+    
     try {
       if (isFollowing) {
         await unfollowUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();

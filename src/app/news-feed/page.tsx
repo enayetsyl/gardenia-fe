@@ -36,7 +36,6 @@ const NewsFeed = () => {
   });
 
   useEffect(() => {
-    console.log('Fetched posts:', newsFeed);
     if (newsFeed && !isNewsFeedLoading) {
       if (page === 1) {
         setPosts(newsFeed.data); 
@@ -48,7 +47,6 @@ const NewsFeed = () => {
       
       setHasMore(newsFeed.data.length > 0); 
       setIsFetchingMore(false); 
-      console.log('Updated posts:', posts);
     }
   }, [newsFeed, isNewsFeedLoading, page]);
   
@@ -59,7 +57,6 @@ const NewsFeed = () => {
   
     if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !isFetchingMore && !isFetching) {
       setIsFetchingMore(true);
-      console.log("Loading more content for page: ", page + 1); // Debugging line
       setPage((prevPage) => prevPage + 1);
     }
   };

@@ -21,7 +21,6 @@ function ProfilePhotos() {
   const [zoomLevel, setZoomLevel] = useState(1);
   const {user} = useUser();
   const {data: profilePhotos} = useGetProfilePhotosQuery({userId: user?._id as string});
-  console.log('profile photos', profilePhotos);
 
   useEffect(() => {
     // Check if the element exists before setting the app element
