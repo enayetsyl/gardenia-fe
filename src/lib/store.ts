@@ -4,6 +4,7 @@ import { authApi } from './api/authApi';
 import { userApi } from './api/userApi';
 import { postApi } from './api/postApi';
 import UserReducer from './features/UserState/UserSlice';
+import { adminApi } from './api/adminApi';
 
 
 export const makeStore = () => {
@@ -14,9 +15,10 @@ export const makeStore = () => {
       [postApi.reducerPath]: postApi.reducer,
       [authApi.reducerPath]: authApi.reducer,
       [userApi.reducerPath]: userApi.reducer,
+      [adminApi.reducerPath]: adminApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, postApi.middleware),
+      getDefaultMiddleware().concat(authApi.middleware, userApi.middleware, postApi.middleware, adminApi.middleware),
   });
 };
 

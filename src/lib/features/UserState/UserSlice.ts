@@ -1,13 +1,13 @@
 import { User } from '@/type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+
 interface UserState {
   user: User | null;
 }
 
 const initialState: UserState = {
   user: null,
-  // isAuthenticated: false,
 };
 
 const userSlice = createSlice({

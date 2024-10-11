@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomButton from '@/Components/Shared/CustomButton';
 import Link from 'next/link';
 import { FaGraduationCap } from 'react-icons/fa6';
@@ -28,6 +28,23 @@ const IntroDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [updateUserDetails, { isLoading }] = useUpdateUserDetailsMutation();
   const [editableDetails, setEditableDetails] = useState<Details>(details);
+
+  useEffect(() => {
+    if (user) {
+      // Set a timeout to delay the state update by 2 seconds (2000ms)
+      const timeoutId = setTimeout(() => {
+        setDetails({
+          study: user.study || '',
+          location: user.location || '',
+          maritalStatus: user.maritalStatus || '',
+          website: user.website || '',
+        });
+       
+      }, 2000);
+  
+      return () => clearTimeout(timeoutId); // Clean up the timeout
+    }
+  }, [user]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

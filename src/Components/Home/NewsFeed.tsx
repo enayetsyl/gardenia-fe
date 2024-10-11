@@ -2,7 +2,7 @@
 import { useGetNewsFeedQuery } from '@/lib/api/postApi';
 import CustomContainer from '../Shared/CustomContainer';
 import SeeMoreButton from './SeeMoreButton';
-import Loading from '../Shared/Loading';
+import NewsFeedLoading from './NewsFeedLoading';
 import PostCard from '../ProfilePost/PostCard';
 import Link from 'next/link';
 import { NewsFeed as NewsFeedType } from '@/type';
@@ -24,12 +24,15 @@ const NewsFeed = () => {
     <div className="bg-background-dark">
       <CustomContainer>
         <h1 className="text-center text-h2 lg:text-h2-lg font-bold bg-gradient-heading bg-clip-text text-transparent pt-20 pb-10">
-          New Feed
+          News Feed
         </h1>
+        
 
         <div className=" py-5">
           {isNewsFeedLoading ? (
-            <Loading />
+            <div className='relative h-80 py-10'>
+            <NewsFeedLoading/>
+            </div>
           ) : (
             <div className="pt-10 space-y-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
               {sortedNewsFeed?.slice(0, 6).map((post: NewsFeedType) => {

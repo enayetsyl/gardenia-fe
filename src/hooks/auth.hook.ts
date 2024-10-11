@@ -35,6 +35,12 @@ export const useAuth = () => {
       const res = await loginUser(userData).unwrap();
       if (res.success) {
         toast.success('Login successful');
+        // Save tokens in cookies
+      document.cookie = `accessToken=${res.data.accessToken}; path=/;`;
+      document.cookie = `refreshToken=${res.data.refreshToken}; path=/;`;
+      document.cookie = `user=${JSON.stringify(res.data.user)}; path=/;`;
+
+
         router.push(`/my-profile/${res.data.user._id}`);
         dispatch(setUser(res.data.user));
         // await router.push('/my-profile');
@@ -47,6 +53,10 @@ export const useAuth = () => {
 
   const handleLogout = () => {
     dispatch(clearUser());
+    // Remove cookies on the client side
+  document.cookie = 'accessToken=; Max-Age=0; path=/';
+  document.cookie = 'refreshToken=; Max-Age=0; path=/';
+  document.cookie = 'user=; Max-Age=0; path=/';
     router.push('/login');
     toast.success('Logged out successfully');
   };

@@ -1,16 +1,36 @@
 'use client';
 import CustomButton from '@/Components/Shared/CustomButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUpdateUserBioMutation } from '@/lib/api/userApi';
 import { useUser } from '@/hooks/user.hook';
+import { useGetCurrentUserQuery } from '@/lib/api/authApi';
 
 const Bio = () => {
   const {user} = useUser()
-  const [bio, setBio] = useState(user?.bio || '');
+  const { data: userData, refetch } = useGetCurrentUserQuery(user?._id as string, {
+    skip: !user?._id, 
+  });
+
+  console.log('userData', userData)
+
+  const [bio, setBio] = useState(userData?.data.bio || ''); 
   const [isEditing, setIsEditing] = useState(false);
   const [newBio, setNewBio] = useState(bio);
   const maxLength = 100;
   const [updateUserBio, { isLoading }] = useUpdateUserBioMutation();
+
+  useEffect(() => {
+    if (userData?.data.bio) {
+      // Set a timeout to delay the state update by 2 seconds (2000ms)
+      const timeoutId = setTimeout(() => {
+        setBio(userData.data.bio || ''); // Set bio from fetched data
+        setNewBio(userData.data.bio || ''); // Update newBio for editing
+      }, 2000);
+  
+      return () => clearTimeout(timeoutId);
+    }
+  }, [userData]);
+  
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -24,6 +44,7 @@ const Bio = () => {
         if (response.success) {
           setBio(newBio);
           setIsEditing(false);
+         refetch()
         } else {
           console.error('Failed to update bio:', response.message);
         }
