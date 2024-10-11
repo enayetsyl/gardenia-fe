@@ -1,5 +1,5 @@
 import envConfig from "@/config/envConfig";
-import { NewsFeed, Post } from "@/type";
+import { NewsFeed as NewsFeedType, Post } from "@/type";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from 'js-cookie';
 
@@ -23,7 +23,7 @@ interface CommentRequest {
 
 export interface NewsFeedResponse {
   success: boolean;
-  data: NewsFeed[];
+  data: NewsFeedType[];
   message: string;
 }
 
@@ -134,7 +134,13 @@ export const postApi = createApi({
         body: { content, commentId },
       }),
     }),
+    searchAndFilterPosts: builder.query<NewsFeedResponse, { search?: string; category?: string; page?: number }>({
+      query: ({ search, category, page }) => ({
+        url: '/posts/searchAndFilterPosts',
+        params: { search, category, page },
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation, useGetSinglePostQuery } = postApi;
+export const { useGetPostsQuery, useGetUpvotesQuery, useCreatePostMutation, useGetNewsFeedQuery, useUpvotePostMutation, useRemoveUpvoteMutation, useDeletePostMutation, useAddCommentMutation, useUpdatePostMutation, useDeleteCommentMutation, useUpdateCommentMutation, useAddFavoriteMutation, useRemoveFavoriteMutation, useGetSinglePostQuery, useSearchAndFilterPostsQuery } = postApi;
