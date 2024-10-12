@@ -86,7 +86,7 @@ const ImageGallery = () => {
   return (
     <div className="bg-background-dark">
       <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent py-20">
-        Forgot Password?
+        Image Gallery
       </h1>
 
       <div className="flex flex-col gap-5 max-w-4xl mx-auto ">

@@ -51,6 +51,7 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
   const [isPremium, setIsPremium] = useState(false);
   const [link, setLink] = useState('');
   const [createPost, {isLoading: isCreatePostLoading}] = useCreatePostMutation();
+  const {refetch: refetchProfilePhotos} = useGetProfilePhotosQuery(user?._id || '')
   const {refetch} = useGetPostsQuery(user?._id || '')
   const {refetch: refetchNewsFeed} = useGetNewsFeedQuery()
   const handleOpenModal = () => setIsModalOpen(true);
@@ -111,6 +112,7 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
         setIsModalOpen(false); 
         refetch()
         refetchNewsFeed()
+        refetchProfilePhotos()
         toast.success(isEditing ? 'Post updated successfully' : 'Post created successfully');
         if (onClose) onClose();
       } else {

@@ -20,7 +20,9 @@ const GardeningTips = () => {
       </div>
 
       <div className="flex justify-center py-10">
-      <SeeMoreButton text="Explore Tips" /> 
+      <Link href='/news-feed'>
+      
+      <SeeMoreButton text="Explore Tips" /> </Link>
       </div>
      </CustomContainer>
     </div>

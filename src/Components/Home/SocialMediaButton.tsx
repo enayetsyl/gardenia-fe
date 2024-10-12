@@ -5,7 +5,7 @@ const SocialMediaButton = () => {
   return (
     <div className="flex justify-center items-center bg-background-dark py-5">
       <div className="button-container">
-        <Link href="https://www.instagram.com/">
+        <Link href="https://www.instagram.com/" target="_blank">
           <button className="button flex-center">
             <svg
               viewBox="0 0 24 24"
@@ -41,7 +41,7 @@ const SocialMediaButton = () => {
             </svg>
           </button>
         </Link>
-        <Link href="https://www.twitter.com/">
+        <Link href="https://www.twitter.com/" target="_blank">
           <button className="button flex-center">
             <svg
               fill="#fff"
@@ -85,7 +85,7 @@ const SocialMediaButton = () => {
             </svg>
           </button>
         </Link>
-        <Link href="https://www.github.com/">
+        <Link href="https://www.github.com/" target="_blank">
           <button className="button flex-center">
             <svg
               viewBox="0 0 20 20"
@@ -130,7 +130,7 @@ const SocialMediaButton = () => {
             </svg>
           </button>
         </Link>
-        <Link href="https://www.youtube.com/">
+        <Link href="https://www.youtube.com/" target="_blank">
           <button className="button flex-center">
             <svg
               stroke="#fff"

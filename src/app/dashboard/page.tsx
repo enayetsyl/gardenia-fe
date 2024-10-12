@@ -6,7 +6,6 @@ import { useUser } from "@/hooks/user.hook"
 
 export default function Dashboard() {
   const { user } = useUser();
-  console.log('user', user)
   return (
     <div>
       {user ? (

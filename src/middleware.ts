@@ -24,7 +24,6 @@ export async function middleware(request: NextRequest) {
   let user = null;
   if (token) {
     user = decodeToken(token);
-    console.log('Decoded User:', user);
   }
 
   // If user is authenticated, redirect them away from auth routes

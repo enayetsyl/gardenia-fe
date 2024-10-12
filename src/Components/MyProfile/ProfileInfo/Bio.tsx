@@ -11,7 +11,6 @@ const Bio = () => {
     skip: !user?._id, 
   });
 
-  console.log('userData', userData)
 
   const [bio, setBio] = useState(userData?.data.bio || ''); 
   const [isEditing, setIsEditing] = useState(false);

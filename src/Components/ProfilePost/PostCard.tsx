@@ -25,7 +25,7 @@ import toast from 'react-hot-toast';
 import { User } from '@/type';
 import CreatePost from './CreatePost';
 import { useGetCurrentUserQuery } from '@/lib/api/authApi';
-import { useFollowUserMutation, useUnfollowUserMutation } from '@/lib/api/userApi';
+import { useFollowUserMutation, useGetProfilePhotosQuery, useUnfollowUserMutation } from '@/lib/api/userApi';
 
 interface LocalComment {
   _id: string;
@@ -84,6 +84,8 @@ const PostCard: React.FC<PostCardProps> = ({
   const { refetch } = useGetNewsFeedQuery();
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
   const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
+  const {refetch: refetchNewsFeed}=useGetNewsFeedQuery();
+  const {refetch: refetchProfilePhotos}=useGetProfilePhotosQuery({userId: user?._id as string});
   const [deletePost] = useDeletePostMutation();
   const [upvotePost] = useUpvotePostMutation();
   const [removeUpvote] = useRemoveUpvoteMutation();
@@ -126,7 +128,6 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleLike = async () => {
     if (!user || !postId) {
       toast.error('You must be logged in to like a post');
-      console.error('User or postId is undefined', { user, postId });
       return;
     }
     try {
@@ -135,14 +136,17 @@ const PostCard: React.FC<PostCardProps> = ({
         setLocalLikeCount((prev) => prev - 1);
         refetch();
         currentUserRefetch();
+        refetchProfilePhotos();
+        refetchNewsFeed();
       } else {
         await upvotePost({ postId, userId: user._id || '' }).unwrap();
         setLocalLikeCount((prev) => prev + 1);
         refetch();
         currentUserRefetch();
+        refetchProfilePhotos();
+        refetchNewsFeed();
       }
     } catch (error) {
-      console.error('Error toggling like:', error);
       // Optionally, show an error message to the user
     }
   };
@@ -165,9 +169,10 @@ const PostCard: React.FC<PostCardProps> = ({
         setNewComment('');
         refetch();
         refetchProfile();
+        refetchNewsFeed();
+        refetchProfilePhotos();
       }
     } catch (error) {
-      console.error('Error adding comment:', error);
       toast.error('Failed to add comment');
     }
   };
@@ -180,7 +185,6 @@ const PostCard: React.FC<PostCardProps> = ({
     // setFavorites(favorites + 1);
     if (!user || !postId) {
       toast.error('You must be logged in to add a post in your favorites');
-      console.error('User or postId is undefined', { user, postId });
       return;
     }
     try {
@@ -191,12 +195,16 @@ const PostCard: React.FC<PostCardProps> = ({
         refetch();
         currentUserRefetch();
         refetchProfile();
+        refetchProfilePhotos();
+        refetchNewsFeed();
       } else {
         await addFavorite({ postId, userId: user._id || '' }).unwrap();
         setLocalFavoritesCount((prev) => prev + 1);
         refetch();
         currentUserRefetch();
         refetchProfile();
+        refetchProfilePhotos();
+        refetchNewsFeed();
         toast.success('Post added to favorites');
       }
     } catch (error) {
@@ -227,6 +235,8 @@ const PostCard: React.FC<PostCardProps> = ({
       toast.success('Post deleted successfully');
       refetch();
       refetchProfile();
+      refetchNewsFeed();
+      refetchProfilePhotos();
       setIsModalOpen(false);
     } catch (error) {
       toast.error('Error deleting post');
@@ -246,8 +256,9 @@ const PostCard: React.FC<PostCardProps> = ({
       toast.success('Comment deleted successfully');
       refetch();
       refetchProfile();
+      refetchNewsFeed();
+      refetchProfilePhotos();
     } catch (error) {
-      console.error('Error deleting comment:', error);
       toast.error('Failed to delete comment');
     }
   };
@@ -267,8 +278,9 @@ const PostCard: React.FC<PostCardProps> = ({
       setEditedCommentContent('');
       refetch();
       refetchProfile();
+      refetchNewsFeed();
+      refetchProfilePhotos();
     } catch (error) {
-      console.error('Error updating comment:', error);
       toast.error('Failed to update comment');
     }
   };
@@ -286,10 +298,18 @@ const PostCard: React.FC<PostCardProps> = ({
     try {
       if (isFollowing) {
         await unfollowUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        refetch();
+        refetchProfile();
+        refetchNewsFeed();
+        refetchProfilePhotos();
         toast.success(`You have unfollowed ${userName}`);
         setIsFollowing(false);
       } else {
         await followUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        refetch();
+        refetchProfile();
+        refetchNewsFeed();
+        refetchProfilePhotos();
         toast.success(`You are now following ${userName}`);
         setIsFollowing(true);
       }
