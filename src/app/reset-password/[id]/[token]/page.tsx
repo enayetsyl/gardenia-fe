@@ -3,6 +3,7 @@ import CustomButton from '@/Components/Shared/CustomButton';
 import CustomContainer from '@/Components/Shared/CustomContainer';
 import CustomInput from '@/Components/Shared/CustomInput';
 import { useResetPasswordMutation } from '@/lib/api/authApi';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -15,7 +16,7 @@ const ResetPassword = ({
 
   const { id, token } = params;
 
-  
+  const router = useRouter()
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -32,8 +33,8 @@ const ResetPassword = ({
 
     try {
       await resetPassword({ id, token, password }).unwrap();
-
       toast.success('Password reset successfully!');
+      router.push('/login')
       
     } catch (error) {
       // console.error('Failed to reset password:', error);
