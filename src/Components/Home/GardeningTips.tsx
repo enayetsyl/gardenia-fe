@@ -2,6 +2,7 @@ import { gardeningTips } from "@/constant"
 import TipsCard from "./TipsCard"
 import CustomContainer from "../Shared/CustomContainer"
 import SeeMoreButton from "./SeeMoreButton"
+import Link from "next/link"
 
 const GardeningTips = () => {
   return (

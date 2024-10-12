@@ -4,6 +4,8 @@ import { User } from '@/type';
 import { useGetDailyStatsQuery, useGetMonthlyStatsQuery, useGetStatsOverviewQuery } from '@/lib/api/adminApi';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js';
+import StatCard from './StatCard';
+import CustomContainer from '@/Components/Shared/CustomContainer';
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -17,9 +19,9 @@ const AdminDashboard = ({user}: {user: User}) => {
     end: '2024-10-31',
   });
 
-  if (isOverviewLoading || isMonthlyLoading || isDailyLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isOverviewLoading || isMonthlyLoading || isDailyLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   if (overviewError || monthlyError || dailyError) {
     return <div>Error loading stats</div>;
@@ -74,7 +76,7 @@ const chartData = {
   datasets: [
     {
       label: 'New Users',
-      data: dailyUsers, // Y-axis data for new users
+      data: dailyUsers.map(item => item.newUsers), // Extract numbers for new users
       borderColor: 'rgba(75, 192, 192, 1)',
       backgroundColor: 'rgba(75, 192, 192, 0.2)',
       fill: true,
@@ -82,7 +84,7 @@ const chartData = {
     },
     {
       label: 'New Posts',
-      data: dailyPosts, // Y-axis data for new posts
+      data: dailyPosts.map(item => item.newPosts), // Extract numbers for new posts
       borderColor: 'rgba(54, 162, 235, 1)',
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
       fill: true,
@@ -90,7 +92,7 @@ const chartData = {
     },
     {
       label: 'New Comments',
-      data: dailyComments, // Y-axis data for new comments
+      data: dailyComments.map(item => item.newComments), // Extract numbers for new comments
       borderColor: 'rgba(255, 206, 86, 1)',
       backgroundColor: 'rgba(255, 206, 86, 0.2)',
       fill: true,
@@ -98,7 +100,7 @@ const chartData = {
     },
     {
       label: 'New Premium Content',
-      data: dailyPremiumContent, // Y-axis data for new premium content
+      data: dailyPremiumContent.map(item => item.newPremiumContent), // Extract numbers for new premium content
       borderColor: 'rgba(153, 102, 255, 1)',
       backgroundColor: 'rgba(153, 102, 255, 0.2)',
       fill: true,
@@ -106,6 +108,7 @@ const chartData = {
     },
   ],
 };
+
 
 const chartOptions: ChartOptions<'line'> = {
   responsive: true,
@@ -122,8 +125,9 @@ const chartOptions: ChartOptions<'line'> = {
 
 
   return (
-    <div>
-      <div className="relative w-full h-80 md:h-96 lg:h-[500px]">
+    <div className='py-10 bg-background-dark'>
+    <CustomContainer>
+    <div className="relative w-full h-80 md:h-96 lg:h-[500px]">
         <Image
           alt="cover image"
           src={adminDashboard}
@@ -139,24 +143,48 @@ const chartOptions: ChartOptions<'line'> = {
       </div>
       
 
-      <div>
-        <h2>Overview</h2>
-        <p>Total Users: {overview?.data.totalUsers}</p>
-        <p>Total Posts: {overview?.data.totalPosts}</p>
-        <p>Total Comments: {overview?.data.totalComments}</p>
-        <p>Total Premium Content: {overview?.data.totalPremiumContent}</p>
+      <div className='space-y-10 flex flex-col items-center'>
+      <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent py-5">
+            Overview
+          </h1>
+        <StatCard
+        text1="Total Users"
+        data1={overview?.data.totalUsers ?? 0}
+        text2="Total Posts"
+        data2={overview?.data.totalPosts ?? 0}
+        />
+
+        <StatCard
+        text1="Total Comments"
+        data1={overview?.data.totalComments ?? 0}
+        text2="Total Premium Content"
+        data2={overview?.data.totalPremiumContent ?? 0}
+        />
+        
+      </div>
+      <div className='space-y-10 flex flex-col items-center'>
+      <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent py-5">
+      Monthly Stats
+          </h1>
+        <StatCard
+        text1="New Users This Month"
+        data1={monthlyStats?.data.newUsersThisMonth ?? 0}
+        text2="New Posts This Month"
+        data2={monthlyStats?.data.newPostsThisMonth ?? 0}/>
+       
+       <StatCard
+       text1="New Comments This Month"
+       data1={monthlyStats?.data.newCommentsThisMonth ?? 0}
+       text2="New Premium Content This Month"
+       data2={monthlyStats?.data.newPremiumContentThisMonth ?? 0}/>
       </div>
       <div>
-        <h2>Monthly Stats</h2>
-        <p>New Users This Month: {monthlyStats?.data.newUsersThisMonth}</p>
-        <p>New Posts This Month: {monthlyStats?.data.newPostsThisMonth}</p>
-        <p>New Comments This Month: {monthlyStats?.data.newCommentsThisMonth}</p>
-        <p>New Premium Content This Month: {monthlyStats?.data.newPremiumContentThisMonth}</p>
-      </div>
-      <div>
-        <h2>Daily Stats</h2>
+        <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent py-5">
+            Daily Stats
+          </h1>
         <Line data={chartData} options={chartOptions} />
       </div>
+    </CustomContainer>
     </div>
   )
 }

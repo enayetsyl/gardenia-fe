@@ -37,6 +37,7 @@ const NewsFeed = () => {
 
   useEffect(() => {
     if (newsFeed && !isNewsFeedLoading) {
+      console.log(`Fetched ${newsFeed.data.length} posts on page ${page}`);
       if (page === 1) {
         setPosts(newsFeed.data); 
       } else {
@@ -44,7 +45,7 @@ const NewsFeed = () => {
         setPosts((prev) => [...prev, ...newsFeed.data.filter(post => !prev.some(p => p._id === post._id))]);
       }
   
-      
+      console.log('posts', posts)
       setHasMore(newsFeed.data.length > 0); 
       setIsFetchingMore(false); 
     }
@@ -82,7 +83,7 @@ const NewsFeed = () => {
   if (isNewsFeedLoading && page === 1) return <Loading />; // Show loading only on the first page
 
   return (
-    <div>
+    <div className='bg-background-dark'>
       <CustomContainer>
         <div className="pt-10">
           {/* Search and Filter UI */}
@@ -134,7 +135,7 @@ const NewsFeed = () => {
           </div>
 
           {isFetchingMore && <Loading />} {/* Show loading spinner when fetching more posts */}
-          {!hasMore && <p className="text-center mt-5">No more posts to load</p>} {/* Show message if no more posts */}
+          {!hasMore && <p className="text-center py-10 text-secondary-dark font-bold text-2xl">No more posts to load</p>} {/* Show message if no more posts */}
         </div>
       </CustomContainer>
     </div>

@@ -109,7 +109,10 @@ const PostCard: React.FC<PostCardProps> = ({
   const [isHoveringUsername, setIsHoveringUsername] = useState(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
+  const shouldHideContent = isPremium && (!user || !user.isVerified);
 
+
+  
   useEffect(() => {
     if (user && user.followingId?.includes(userId._id || '')) {
       setIsFollowing(true);
@@ -422,42 +425,50 @@ const PostCard: React.FC<PostCardProps> = ({
           )}
         </div>
 
-        <p className="mb-4">{content}</p>
+      {
+        shouldHideContent ? (
+          <p className='text-center text-secondary-dark py-5'>This post is premium content. Please subscribe to view this content.</p>
+        ) : (
+          <>
+            <p className="mb-4">{content}</p>
 
-        {media && (
-          <div className="mb-4 flex justify-center items-center">
-            {media.type === 'image' ? (
-              <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
-              <Image
-                src={media.url}
-                alt="Post media"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="rounded-lg object-cover"
-              />
-            </div>
-            ) : (
-              <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
-        <video 
-          src={media.url} 
-          controls 
-          className="w-full h-full rounded-lg object-cover"
-        />
-      </div>
-            )}
-          </div>
-        )}
+{media && (
+  <div className="mb-4 flex justify-center items-center">
+    {media.type === 'image' ? (
+      <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
+      <Image
+        src={media.url}
+        alt="Post media"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        className="rounded-lg object-cover"
+      />
+    </div>
+    ) : (
+      <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
+<video 
+  src={media.url} 
+  controls 
+  className="w-full h-full rounded-lg object-cover"
+/>
+</div>
+    )}
+  </div>
+)}
 
-        {link && (
-          <Link
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline mb-4 block"
-          >
-            {link}
-          </Link>
-        )}
+{link && (
+  <Link
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-500 hover:underline mb-4 block"
+  >
+    {link}
+  </Link>
+)}
+          </>
+        )
+      }
 
         <div className="flex justify-center items-center space-x-8 mb-4">
           <LikeButton

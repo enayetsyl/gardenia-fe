@@ -9,6 +9,7 @@ import userImage from '../../../public/user-profile-image-1.webp';
 import Image from 'next/image';
 import { FaFileAudio, FaImage, FaVideo } from 'react-icons/fa6';
 import { toast } from 'react-hot-toast';
+import { useGetProfilePhotosQuery } from '@/lib/api/userApi';
 
 const categories: string[] = [
   "Vegetable Gardening",
@@ -51,7 +52,7 @@ const CreatePost = ({ isEditing = false, postToEdit, onClose }: CreatePostProps)
   const [isPremium, setIsPremium] = useState(false);
   const [link, setLink] = useState('');
   const [createPost, {isLoading: isCreatePostLoading}] = useCreatePostMutation();
-  const {refetch: refetchProfilePhotos} = useGetProfilePhotosQuery(user?._id || '')
+  const {refetch: refetchProfilePhotos} = useGetProfilePhotosQuery({userId: user?._id || ''})
   const {refetch} = useGetPostsQuery(user?._id || '')
   const {refetch: refetchNewsFeed} = useGetNewsFeedQuery()
   const handleOpenModal = () => setIsModalOpen(true);
