@@ -15,7 +15,7 @@ const UserContent: React.FC  = () => {
       {isLoading ? <div className="flex justify-center items-center">
       <UserLoader/>
     </div> : (
-        <div className="py-5">
+        <div className="flex flex-col gap-10">
           {posts?.data?.map((post) => (
             <PostCard key={post._id}
             postId={post._id}
