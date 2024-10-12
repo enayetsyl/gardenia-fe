@@ -111,7 +111,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const [isFollowing, setIsFollowing] = useState(false);
   const shouldHideContent = isPremium && (!user || !user.isVerified);
 
-
+  console.log('comments', comments)
   
   useEffect(() => {
     if (user && user.followingId?.includes(userId._id || '')) {
@@ -174,6 +174,7 @@ const PostCard: React.FC<PostCardProps> = ({
         refetchProfile();
         refetchNewsFeed();
         refetchProfilePhotos();
+        
       }
     } catch (error) {
       toast.error('Failed to add comment');

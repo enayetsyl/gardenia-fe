@@ -223,8 +223,8 @@ const Login: React.FC = () => {
     password: '',
   });
   const [loginFormData, setLoginFormData] = useState<LoginUser>({
-    email: 'a@b.com',
-    password: '123',
+    email: '',
+    password: '',
   });
 
   const { handleRegister, isRegisterLoading, handleLogin, isLoginLoading } =
