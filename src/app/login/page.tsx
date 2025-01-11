@@ -291,11 +291,18 @@ const Login: React.FC = () => {
             </div>
             <CustomButton
               type="submit"
-              text={isLoginLoading ? 'Loginnnnnnn...' : 'Login'}
+              text={isLoginLoading ? 'Loading...' : 'Login'}
               disabled={isLoginLoading}
               className="bg-button-bg hover:bg-button-hover text-button-text "
             />
-           
+
+            {/* guest login button */}
+            <CustomButton
+              type="submit"
+              text={isLoginLoading ? 'Loading...' : 'Login as Guest'}
+              disabled={isLoginLoading}
+              className="bg-black hover:bg-button-hover text-button-text"
+            />
           </form>
         </div>
       </TabsContent>
@@ -352,7 +359,6 @@ const Login: React.FC = () => {
               disabled={isRegisterLoading}
               className="bg-button-bg hover:bg-button-hover text-button-text "
             />
-           
           </form>
         </div>
       </TabsContent>
