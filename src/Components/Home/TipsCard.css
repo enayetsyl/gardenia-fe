@@ -1,8 +1,6 @@
-/* From Uiverse.io by joe-watson-sbf */ 
+/* From Uiverse.io by joe-watson-sbf */
 .flip-card {
   background-color: transparent;
-  width: 190px;
-  height: 254px;
   perspective: 1000px;
   font-family: sans-serif;
 }
@@ -27,8 +25,9 @@
   transform: rotateY(180deg);
 }
 
-.flip-card-front, .flip-card-back {
-  box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+.flip-card-front,
+.flip-card-back {
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -37,19 +36,29 @@
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  border: 2px solid #81C784; /* Changed to secondary color */
+  border: 2px solid #81c784; /* Changed to secondary color */
   border-radius: 1rem;
 }
 
 .flip-card-front {
-  background: linear-gradient(120deg, #F1F8E9 60%, #C8E6C9 88%,
-     #66BB6A 40%, rgba(46, 125, 50, 0.6) 48%); /* Using background and primary colors */
-  color: #2E7D32; /* Changed to primary color */
+  background: linear-gradient(
+    120deg,
+    #f1f8e9 60%,
+    #c8e6c9 88%,
+    #66bb6a 40%,
+    rgba(46, 125, 50, 0.6) 48%
+  ); /* Using background and primary colors */
+  color: #2e7d32; /* Changed to primary color */
 }
 
 .flip-card-back {
-  background: linear-gradient(120deg, #66BB6A 30%, #2E7D32 88%,
-     #F1F8E9 40%, #C8E6C9 78%); /* Using primary and background colors */
-  color: #FFFFFF; /* Using text.light color */
+  background: linear-gradient(
+    120deg,
+    #66bb6a 30%,
+    #2e7d32 88%,
+    #f1f8e9 40%,
+    #c8e6c9 78%
+  ); /* Using primary and background colors */
+  color: #ffffff; /* Using text.light color */
   transform: rotateY(180deg);
 }

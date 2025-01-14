@@ -19,22 +19,20 @@ const NewsFeed = () => {
       )
     : [];
 
- 
   return (
     <div className="bg-background-dark">
       <CustomContainer>
         <h1 className="text-center text-h2 lg:text-h2-lg font-bold bg-gradient-heading bg-clip-text text-transparent pt-20 pb-10">
           News Feed
         </h1>
-        
 
         <div className=" py-5">
           {isNewsFeedLoading ? (
-            <div className='relative h-80 py-10'>
-            <NewsFeedLoading/>
+            <div className="relative h-80 py-10">
+              <NewsFeedLoading />
             </div>
           ) : (
-            <div className="pt-10 space-y-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="pt-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
               {sortedNewsFeed?.slice(0, 6).map((post: NewsFeedType) => {
                 return (
                   <PostCard
@@ -77,7 +75,7 @@ const NewsFeed = () => {
 
         <div className="flex justify-center py-5">
           <Link href="/news-feed">
-          <SeeMoreButton text="View More" />
+            <SeeMoreButton text="View More" />
           </Link>
         </div>
       </CustomContainer>

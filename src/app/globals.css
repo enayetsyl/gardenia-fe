@@ -4,13 +4,13 @@
 
 @keyframes dropDown {
   0% {
-    transform: translate(-50%, -150%);
+    transform: translateY(-50%);
   }
   100% {
-    transform: translate(-50%, -50%);
+    transform: translateY(0%);
   }
 }
 
 .dropDown {
-  animation: dropDown 2s ease-out forwards; /* Smoothly end at the final state */
+  animation: dropDown 0.5s ease-out forwards; /* Smoothly end at the final state */
 }

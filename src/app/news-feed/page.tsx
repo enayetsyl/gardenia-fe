@@ -1,24 +1,24 @@
-"use client"
+'use client';
 import React, { useState, useEffect } from 'react';
-import { useSearchAndFilterPostsQuery } from "@/lib/api/postApi";
-import PostCard from "@/Components/ProfilePost/PostCard";
-import CustomContainer from "@/Components/Shared/CustomContainer";
-import Loading from "@/Components/Shared/Loading";
+import { useSearchAndFilterPostsQuery } from '@/lib/api/postApi';
+import PostCard from '@/Components/ProfilePost/PostCard';
+import CustomContainer from '@/Components/Shared/CustomContainer';
+import Loading from '@/Components/Shared/Loading';
 import { NewsFeed as NewsFeedType } from '@/type';
 import CustomInput from '@/Components/Shared/CustomInput';
 
 // Gardening categories
 const categories: string[] = [
-  "Vegetable Gardening",
-  "Flower Gardening",
-  "Herb Gardening",
-  "Fruit Gardening",
-  "Indoor Gardening",
-  "Landscaping",
-  "Succulents & Cacti",
-  "Container Gardening",
-  "Organic Gardening",
-  "Seasonal Gardening"
+  'Vegetable Gardening',
+  'Flower Gardening',
+  'Herb Gardening',
+  'Fruit Gardening',
+  'Indoor Gardening',
+  'Landscaping',
+  'Succulents & Cacti',
+  'Container Gardening',
+  'Organic Gardening',
+  'Seasonal Gardening',
 ];
 
 const NewsFeed = () => {
@@ -29,7 +29,11 @@ const NewsFeed = () => {
   const [hasMore, setHasMore] = useState(true); // Track if more posts are available for fetching
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const { data: newsFeed, isLoading: isNewsFeedLoading, isFetching } = useSearchAndFilterPostsQuery({
+  const {
+    data: newsFeed,
+    isLoading: isNewsFeedLoading,
+    isFetching,
+  } = useSearchAndFilterPostsQuery({
     search,
     category,
     page,
@@ -39,29 +43,36 @@ const NewsFeed = () => {
     if (newsFeed && !isNewsFeedLoading) {
       console.log(`Fetched ${newsFeed.data.length} posts on page ${page}`);
       if (page === 1) {
-        setPosts(newsFeed.data); 
+        setPosts(newsFeed.data);
       } else {
-        
-        setPosts((prev) => [...prev, ...newsFeed.data.filter(post => !prev.some(p => p._id === post._id))]);
+        setPosts((prev) => [
+          ...prev,
+          ...newsFeed.data.filter(
+            (post) => !prev.some((p) => p._id === post._id)
+          ),
+        ]);
       }
-  
-      console.log('posts', posts)
-      setHasMore(newsFeed.data.length > 0); 
-      setIsFetchingMore(false); 
+
+      console.log('posts', posts);
+      setHasMore(newsFeed.data.length > 0);
+      setIsFetchingMore(false);
     }
   }, [newsFeed, isNewsFeedLoading, page]);
-  
 
   // Infinite scroll function
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  
-    if (scrollTop + clientHeight >= scrollHeight - 5 && hasMore && !isFetchingMore && !isFetching) {
+
+    if (
+      scrollTop + clientHeight >= scrollHeight - 5 &&
+      hasMore &&
+      !isFetchingMore &&
+      !isFetching
+    ) {
       setIsFetchingMore(true);
       setPage((prevPage) => prevPage + 1);
     }
   };
-  
 
   useEffect(() => {
     // Add event listener for scrolling
@@ -83,59 +94,75 @@ const NewsFeed = () => {
   if (isNewsFeedLoading && page === 1) return <Loading />; // Show loading only on the first page
 
   return (
-    <div className='bg-background-dark'>
+    <div className="bg-background-dark">
       <CustomContainer>
         <div className="pt-10">
           {/* Search and Filter UI */}
-          <CustomInput
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search posts..."
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
-          />
-          
-
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
-          >
-            <option value="">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-
-          <div className="space-y-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="flex gap-4">
+            <CustomInput
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search posts..."
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
+            />
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-border mb-4"
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-10">
             {posts.map((post) => (
               <PostCard
                 key={post._id}
                 postId={post._id}
                 userImage={post.userId.userImage}
                 userName={post.userId.name || 'Unknown User'}
-                postTime={post.createdAt ? new Date(post.createdAt).toLocaleString() : 'Unknown Date'}
+                postTime={
+                  post.createdAt
+                    ? new Date(post.createdAt).toLocaleString()
+                    : 'Unknown Date'
+                }
                 category={post.category}
                 content={post.content}
                 title={post.title}
-                media={post.images && post.images.length > 0 ? { type: 'image', url: post.images[0] } : undefined}
+                media={
+                  post.images && post.images.length > 0
+                    ? { type: 'image', url: post.images[0] }
+                    : undefined
+                }
                 link={post.link}
                 isPremium={post.isPremium}
                 upvoteCount={post.upvoteCount || 0}
                 upvotedBy={post.upvotedBy || []}
                 userId={post.userId}
-                updateTime={post.updatedAt ? new Date(post.updatedAt).toLocaleString() : 'Unknown Date'}
+                updateTime={
+                  post.updatedAt
+                    ? new Date(post.updatedAt).toLocaleString()
+                    : 'Unknown Date'
+                }
                 comments={post.comments || []}
                 favoritedBy={post.favoritedBy || []}
                 favoriteCount={post.favoriteCount || 0}
               />
             ))}
           </div>
-
-          {isFetchingMore && <Loading />} {/* Show loading spinner when fetching more posts */}
-          {!hasMore && <p className="text-center py-10 text-secondary-dark font-bold text-2xl">No more posts to load</p>} {/* Show message if no more posts */}
+          {isFetchingMore && <Loading />}{' '}
+          {/* Show loading spinner when fetching more posts */}
+          {!hasMore && (
+            <p className="text-center py-10 text-secondary-dark font-bold text-2xl">
+              No more posts to load
+            </p>
+          )}{' '}
+          {/* Show message if no more posts */}
         </div>
       </CustomContainer>
     </div>

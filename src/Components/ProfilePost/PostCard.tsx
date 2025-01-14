@@ -25,7 +25,11 @@ import toast from 'react-hot-toast';
 import { User } from '@/type';
 import CreatePost from './CreatePost';
 import { useGetCurrentUserQuery } from '@/lib/api/authApi';
-import { useFollowUserMutation, useGetProfilePhotosQuery, useUnfollowUserMutation } from '@/lib/api/userApi';
+import {
+  useFollowUserMutation,
+  useGetProfilePhotosQuery,
+  useUnfollowUserMutation,
+} from '@/lib/api/userApi';
 
 interface LocalComment {
   _id: string;
@@ -52,7 +56,7 @@ interface PostCardProps {
   isPremium?: boolean;
   upvoteCount: number;
   upvotedBy: string[];
-  userId:  User;
+  userId: User;
   updateTime: string;
   comments: LocalComment[];
   favoritedBy: string[];
@@ -76,22 +80,28 @@ const PostCard: React.FC<PostCardProps> = ({
   updateTime,
   comments,
   favoritedBy,
-  favoriteCount
+  favoriteCount,
 }) => {
   const [newComment, setNewComment] = useState('');
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const { user } = useUser();
   const { refetch } = useGetNewsFeedQuery();
   const { refetch: refetchProfile } = useGetPostsQuery(user?._id as string);
-  const { refetch: currentUserRefetch} = useGetCurrentUserQuery(user?._id as string);
-  const {refetch: refetchNewsFeed}=useGetNewsFeedQuery();
-  const {refetch: refetchProfilePhotos}=useGetProfilePhotosQuery({userId: user?._id as string});
+  const { refetch: currentUserRefetch } = useGetCurrentUserQuery(
+    user?._id as string
+  );
+  const { refetch: refetchNewsFeed } = useGetNewsFeedQuery();
+  const { refetch: refetchProfilePhotos } = useGetProfilePhotosQuery({
+    userId: user?._id as string,
+  });
   const [deletePost] = useDeletePostMutation();
   const [upvotePost] = useUpvotePostMutation();
   const [removeUpvote] = useRemoveUpvoteMutation();
   const [addComment] = useAddCommentMutation();
-  const [addFavorite, { isLoading: isAddingFavorite }] = useAddFavoriteMutation();
-  const [removeFavorite, { isLoading: isRemovingFavorite }] = useRemoveFavoriteMutation();
+  const [addFavorite, { isLoading: isAddingFavorite }] =
+    useAddFavoriteMutation();
+  const [removeFavorite, { isLoading: isRemovingFavorite }] =
+    useRemoveFavoriteMutation();
   const [deleteComment] = useDeleteCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
   const [followUser] = useFollowUserMutation();
@@ -111,8 +121,6 @@ const PostCard: React.FC<PostCardProps> = ({
   const [isFollowing, setIsFollowing] = useState(false);
   const shouldHideContent = isPremium && (!user || !user.isVerified);
 
-  console.log('comments', comments)
-  
   useEffect(() => {
     if (user && user.followingId?.includes(userId._id || '')) {
       setIsFollowing(true);
@@ -174,7 +182,6 @@ const PostCard: React.FC<PostCardProps> = ({
         refetchProfile();
         refetchNewsFeed();
         refetchProfilePhotos();
-        
       }
     } catch (error) {
       toast.error('Failed to add comment');
@@ -185,7 +192,7 @@ const PostCard: React.FC<PostCardProps> = ({
     setIsCommentOpen(true);
   };
 
-  const handleFavorite = async() => {
+  const handleFavorite = async () => {
     // setFavorites(favorites + 1);
     if (!user || !postId) {
       toast.error('You must be logged in to add a post in your favorites');
@@ -254,7 +261,6 @@ const PostCard: React.FC<PostCardProps> = ({
   };
 
   const handleCommentDelete = async (commentId: string) => {
-    
     try {
       await deleteComment({ postId: postId as string, commentId }).unwrap();
       toast.success('Comment deleted successfully');
@@ -290,7 +296,7 @@ const PostCard: React.FC<PostCardProps> = ({
   };
 
   const toggleCommentModal = (commentId: string) => {
-    setOpenCommentModal(prevId => prevId === commentId ? null : commentId);
+    setOpenCommentModal((prevId) => (prevId === commentId ? null : commentId));
   };
 
   const handleFollowUser = async () => {
@@ -298,10 +304,13 @@ const PostCard: React.FC<PostCardProps> = ({
       toast.error('You must be logged in to follow a user');
       return;
     }
-    
+
     try {
       if (isFollowing) {
-        await unfollowUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        await unfollowUser({
+          followerId: user._id || '',
+          followedId: userId._id || '',
+        }).unwrap();
         refetch();
         refetchProfile();
         refetchNewsFeed();
@@ -309,7 +318,10 @@ const PostCard: React.FC<PostCardProps> = ({
         toast.success(`You have unfollowed ${userName}`);
         setIsFollowing(false);
       } else {
-        await followUser({ followerId: user._id || '', followedId: userId._id || '' }).unwrap();
+        await followUser({
+          followerId: user._id || '',
+          followedId: userId._id || '',
+        }).unwrap();
         refetch();
         refetchProfile();
         refetchNewsFeed();
@@ -332,7 +344,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const handleMouseLeave = () => {
     hoverTimeoutRef.current = setTimeout(() => {
       setIsHoveringUsername(false);
-    }, 300); 
+    }, 300);
   };
 
   return (
@@ -352,6 +364,55 @@ const PostCard: React.FC<PostCardProps> = ({
         />
       )}
       <div className="p-4 mb-4 relative">
+        {shouldHideContent ? (
+          <p className="text-center text-secondary-dark py-5">
+            This post is premium content. Please subscribe to view this content.
+          </p>
+        ) : (
+          <>
+            {media && (
+              <div className="mb-4 flex justify-center items-center">
+                {media.type === 'image' ? (
+                  <div className="relative w-full aspect-video">
+                    {' '}
+                    {/* 16:9 aspect ratio */}
+                    <Image
+                      src={media.url}
+                      alt="Post media"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="rounded-lg object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative w-full aspect-video">
+                    {' '}
+                    {/* 16:9 aspect ratio */}
+                    <video
+                      src={media.url}
+                      controls
+                      className="w-full h-full rounded-lg object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            <p className="mb-4">{content}</p>
+
+            {link && (
+              <Link
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline mb-4 block"
+              >
+                {link}
+              </Link>
+            )}
+          </>
+        )}
+
         <div className="flex items-center mb-4">
           <Image
             src={userImage}
@@ -360,21 +421,19 @@ const PostCard: React.FC<PostCardProps> = ({
             height={40}
             className="rounded-full mr-3"
           />
-          <div 
+          <div
             className="relative"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <h3 className="font-bold cursor-pointer">
-              {userName}
-            </h3>
+            <h3 className="font-bold cursor-pointer">{userName}</h3>
             <div className="text-sm text-gray-500">
               {postTime} · {category}
             </div>
             {isHoveringUsername && user?._id !== userId._id && (
               <div className="absolute top-full left-0 mt-1 bg-background-dark border rounded shadow-lg z-10 p-3">
                 <div className="flex flex-col gap-2">
-                  <div className='flex justify-center items-center gap-2 mb-3'>
+                  <div className="flex justify-center items-center gap-2 mb-3">
                     <Image
                       src={userId.userImage}
                       alt={userId.name}
@@ -385,9 +444,11 @@ const PostCard: React.FC<PostCardProps> = ({
                     <h3 className="font-bold">{userId.name}</h3>
                   </div>
                   <CustomButton
-                    text={isFollowing ? "Unfollow" : "Follow"}
+                    text={isFollowing ? 'Unfollow' : 'Follow'}
                     className={`px-3 py-1 ${
-                      isFollowing ? 'bg-secondary-dark text-white' : 'bg-button-bg text-white'
+                      isFollowing
+                        ? 'bg-secondary-dark text-white'
+                        : 'bg-button-bg text-white'
                     } hover:bg-opacity-75 rounded-lg cursor-pointer`}
                     onClick={handleFollowUser}
                   />
@@ -395,7 +456,7 @@ const PostCard: React.FC<PostCardProps> = ({
               </div>
             )}
           </div>
-          {typeof userId === 'object' && userId._id === user?._id &&  (
+          {typeof userId === 'object' && userId._id === user?._id && (
             <div className="relative ml-auto">
               <button
                 className="text-xl font-bold"
@@ -426,51 +487,6 @@ const PostCard: React.FC<PostCardProps> = ({
           )}
         </div>
 
-      {
-        shouldHideContent ? (
-          <p className='text-center text-secondary-dark py-5'>This post is premium content. Please subscribe to view this content.</p>
-        ) : (
-          <>
-            <p className="mb-4">{content}</p>
-
-{media && (
-  <div className="mb-4 flex justify-center items-center">
-    {media.type === 'image' ? (
-      <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
-      <Image
-        src={media.url}
-        alt="Post media"
-        fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="rounded-lg object-cover"
-      />
-    </div>
-    ) : (
-      <div className="relative w-full aspect-video"> {/* 16:9 aspect ratio */}
-<video 
-  src={media.url} 
-  controls 
-  className="w-full h-full rounded-lg object-cover"
-/>
-</div>
-    )}
-  </div>
-)}
-
-{link && (
-  <Link
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-blue-500 hover:underline mb-4 block"
-  >
-    {link}
-  </Link>
-)}
-          </>
-        )
-      }
-
         <div className="flex justify-center items-center space-x-8 mb-4">
           <LikeButton
             onClick={handleLike}
@@ -481,27 +497,38 @@ const PostCard: React.FC<PostCardProps> = ({
             onClick={handleCommentClick}
             comments={comments.length}
           />
-          {
-            userId?._id !== user?._id && (
-              <FavoriteButton onClick={handleFavorite} favorites={localFavoritesCount}
+          {userId?._id !== user?._id && (
+            <FavoriteButton
+              onClick={handleFavorite}
+              favorites={localFavoritesCount}
               isFavorited={isFavorited || false}
               isLoading={isAddingFavorite || isRemovingFavorite}
-              />
-            )
-          }
+            />
+          )}
         </div>
 
         {isCommentOpen && (
-          <form onSubmit={editingCommentId ? handleCommentUpdate : handleCommentSubmit} className="flex items-center">
+          <form
+            onSubmit={
+              editingCommentId ? handleCommentUpdate : handleCommentSubmit
+            }
+            className="flex items-center"
+          >
             <CustomInput
               value={editingCommentId ? editedCommentContent : newComment}
-              onChange={(e) => editingCommentId ? setEditedCommentContent(e.target.value) : setNewComment(e.target.value)}
-              placeholder={editingCommentId ? "Edit your comment..." : "Write a comment..."}
+              onChange={(e) =>
+                editingCommentId
+                  ? setEditedCommentContent(e.target.value)
+                  : setNewComment(e.target.value)
+              }
+              placeholder={
+                editingCommentId ? 'Edit your comment...' : 'Write a comment...'
+              }
               className="flex-grow mr-2 p-2 border rounded-lg"
             />
             <CustomButton
               type="submit"
-              text={editingCommentId ? "Update" : "Post"}
+              text={editingCommentId ? 'Update' : 'Post'}
               className="bg-button-bg hover:bg-button-hover text-button-text px-4 py-2 rounded-lg"
             />
             {editingCommentId && (
@@ -519,7 +546,10 @@ const PostCard: React.FC<PostCardProps> = ({
         )}
         <div className="mt-4 space-y-3">
           {comments?.map((comment) => (
-            <div key={comment._id} className="flex justify-start items-start gap-2 relative">
+            <div
+              key={comment._id}
+              className="flex justify-start items-start gap-2 relative"
+            >
               <div className="">
                 <Image
                   src={comment.userId.userImage}
@@ -542,9 +572,7 @@ const PostCard: React.FC<PostCardProps> = ({
                     ...
                   </button>
                   {openCommentModal === comment._id && (
-                    <div
-                      className="absolute top-6 right-0 bg-background-dark border rounded shadow-lg z-10 p-2"
-                    >
+                    <div className="absolute top-6 right-0 bg-background-dark border rounded shadow-lg z-10 p-2">
                       <ul className="flex flex-col gap-2">
                         <CustomButton
                           text="Edit"

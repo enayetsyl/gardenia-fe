@@ -5,21 +5,23 @@ import CustomContainer from '@/Components/Shared/CustomContainer';
 const AboutUs = () => {
   return (
     <>
-      <div className="relative w-full h-80 md:h-96 lg:h-[500px]">
+      <div className="relative min-h-[50vh] z-10 flex flex-col justify-center items-center">
         <Image
           alt="A vibrant garden setup with plants, flowers, and gardening tools"
           src={aboutUsImage}
           layout="fill"
           objectFit="cover"
           quality={100}
+          className="absolute top-0 left-0 w-full h-full z-10"
         />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-70 px-5 py-2.5 rounded-md dropDown">
+        <div className="absolute top-0 left-0 w-full h-full bg-black/70 z-10" />
+        <div className="rounded-md dropDown z-20 flex justify-center items-center max-w-[700px] mb-12">
           <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent">
             About Us
           </h1>
         </div>
       </div>
-      <div className="bg-background-light">
+      <div className="bg-background-light text-center">
         <CustomContainer>
           <h1 className="text-center text-h1 lg:text-h1-lg font-bold bg-gradient-heading bg-clip-text text-transparent pt-20 pb-10">
             Welcome to the Gardening Tips & Advice Platform!

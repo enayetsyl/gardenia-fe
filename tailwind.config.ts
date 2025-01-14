@@ -21,7 +21,7 @@ const config: Config = {
         },
         background: {
           light: '#F1F8E9', // Light background for the main content
-          dark: '#C8E6C9', // Slightly darker background for sections
+          dark: '#f4fff4', // Slightly darker background for sections
           DEFAULT: '#FFFFFF', // Default background (e.g., input fields, cards)
         },
         text: {
@@ -73,8 +73,9 @@ const config: Config = {
         },
       },
       boxShadow: {
-        'neomorphic': '5px 5px 10px #c3c9c4, -5px -5px 10px #ffffff',
-        'neomorphic-inset': 'inset 3px 3px 6px #000000, inset -3px -3px 6px #ffffff',
+        neomorphic: '5px 5px 10px #c3c9c4, -5px -5px 10px #ffffff',
+        'neomorphic-inset':
+          'inset 3px 3px 6px #000000, inset -3px -3px 6px #ffffff',
       },
     },
   },

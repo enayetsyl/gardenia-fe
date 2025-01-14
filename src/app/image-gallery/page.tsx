@@ -89,12 +89,12 @@ const ImageGallery = () => {
         Image Gallery
       </h1>
 
-      <div className="flex flex-col gap-5 max-w-4xl mx-auto ">
+      <div className="flex flex-col gap-5 max-w-[1200px] mx-auto">
         <Gallery
           {...{
-            images: images.map(img => ({ ...img, src: img.src.src })),
+            images: images.map((img) => ({ ...img, src: img.src.src })),
             widths,
-            ratios
+            ratios,
           }}
           lastRowBehavior="match-previous"
         />

@@ -47,16 +47,13 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-
   const handleLogin = () => {
-    
     router.push('/login');
   };
 
   const handleLogout = async () => {
     handleLogoutAuth();
   };
- 
 
   return (
     <nav className="bg-background-light p-4">
@@ -66,21 +63,21 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Desktop menu */}
-        <div className="hidden lg:flex space-x-4 items-center">
+        <div className="hidden lg:flex space-x-1 items-center">
           {navItems.map((item: NavItem) => (
             <Link
               key={item.path}
               href={item.path}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+              className={`py-2 px-4 rounded transition-all duration-300 ${
                 pathname === item.path
-                  ? 'bg-background-dark text-primary font-semibold shadow-neomorphic-inset'
-                  : 'text-text-primary hover:bg-primary-light hover:text-text-light shadow-neomorphic'
+                  ? 'bg-primary-light text-text-light font-semibold'
+                  : 'text-text-primary hover:bg-primary-light hover:text-text-light'
               }`}
             >
               {item.name}
             </Link>
           ))}
-          { user ? (
+          {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -91,26 +88,26 @@ const Navbar: React.FC = () => {
                   alt={user.name}
                   width={40}
                   height={40}
-                  className="rounded-lg shadow-neomorphic transition-all duration-300 hover:bg-primary-light"
+                  className="rounded-lg  transition-all duration-300 hover:bg-primary-light"
                 />
               </button>
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-background-light rounded-lg shadow-neomorphic py-3 z-10">
+                <div className="absolute right-0 mt-2 w-48 bg-background-light rounded-lg  py-3 z-10">
                   <Link
                     href={`/my-profile/${user._id}`}
-                    className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 shadow-neomorphic"
+                    className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 "
                   >
                     My Profile
                   </Link>
                   <Link
                     href="/dashboard"
-                    className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 shadow-neomorphic"
+                    className="block px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 "
                   >
                     Dashboard
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-[87%] text-left px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 shadow-neomorphic"
+                    className="block w-[87%] text-left px-4 py-2  text-text-primary hover:bg-primary-light hover:text-text-light rounded-md m-3 transition-all duration-300 "
                   >
                     Logout
                   </button>
@@ -122,8 +119,8 @@ const Navbar: React.FC = () => {
               onClick={handleLogin}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${
                 pathname === '/login'
-                  ? 'bg-background-dark text-primary font-semibold shadow-neomorphic-inset'
-                  : 'text-text-primary hover:bg-primary-light hover:text-text-light shadow-neomorphic'
+                  ? 'bg-background-dark text-primary font-semibold'
+                  : 'text-text-primary hover:bg-primary-light hover:text-text-light '
               }`}
             >
               Login
@@ -169,7 +166,7 @@ const Navbar: React.FC = () => {
             {item.name}
           </Link>
         ))}
-        { user ? (
+        {user ? (
           <>
             <Link
               href={`/my-profile/${user._id}`}
