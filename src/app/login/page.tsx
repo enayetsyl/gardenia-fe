@@ -242,12 +242,20 @@ const Login: React.FC = () => {
     handleLogin(loginFormData);
   };
 
-  const handleGuestLogin = () => {
+  const handleAdminLogin = () => {
     setLoginFormData({
       email: 'a@b.com',
       password: '123',
     });
     handleLogin({ email: 'a@b.com', password: '123' });
+  };
+
+  const handleUserLogin = () => {
+    setLoginFormData({
+      email: 's@t.com',
+      password: '123',
+    });
+    handleLogin({ email: 's@t.com', password: '123' });
   };
 
   return (
@@ -306,12 +314,20 @@ const Login: React.FC = () => {
               className="bg-button-bg hover:bg-button-hover text-button-text"
             />
 
-            {/* guest login button */}
+            {/* admin login button */}
             <button
-              onClick={handleGuestLogin}
+              onClick={handleAdminLogin}
               className="bg-black hover:bg-button-hover text-button-text p-2.5 rounded"
             >
-              Login as Guest
+              Login as Admin
+            </button>
+
+            {/* user login button */}
+            <button
+              onClick={handleUserLogin}
+              className="bg-slate-800 hover:bg-button-hover text-button-text p-2.5 rounded"
+            >
+              Login as User
             </button>
           </form>
         </div>
