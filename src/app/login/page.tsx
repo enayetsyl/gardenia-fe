@@ -242,6 +242,14 @@ const Login: React.FC = () => {
     handleLogin(loginFormData);
   };
 
+  const handleGuestLogin = () => {
+    setLoginFormData({
+      email: 'a@b.com',
+      password: '123',
+    });
+    handleLogin({ email: 'a@b.com', password: '123' });
+  };
+
   return (
     <TabsProvider defaultValue={'login'} wobbly={true}>
       <div className="flex justify-center pt-2 bg-background-dark">
@@ -295,16 +303,16 @@ const Login: React.FC = () => {
               type="submit"
               text={isLoginLoading ? 'Loading...' : 'Login'}
               disabled={isLoginLoading}
-              className="bg-button-bg hover:bg-button-hover text-button-text "
+              className="bg-button-bg hover:bg-button-hover text-button-text"
             />
 
             {/* guest login button */}
-            <CustomButton
-              type="submit"
-              text={isLoginLoading ? 'Loading...' : 'Login as Guest'}
-              disabled={isLoginLoading}
-              className="bg-black hover:bg-button-hover text-button-text"
-            />
+            <button
+              onClick={handleGuestLogin}
+              className="bg-black hover:bg-button-hover text-button-text p-2.5 rounded"
+            >
+              Login as Guest
+            </button>
           </form>
         </div>
       </TabsContent>
