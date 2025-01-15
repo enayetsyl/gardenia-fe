@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-background-light p-4">
+    <nav className="bg-background-light p-4 z-[1000] relative">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-primary text-2xl font-bold">
           GardenApp

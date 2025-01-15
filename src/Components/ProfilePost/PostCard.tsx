@@ -370,35 +370,43 @@ const PostCard: React.FC<PostCardProps> = ({
           </p>
         ) : (
           <>
-            {media && (
-              <div className="mb-4 flex justify-center items-center">
-                {media.type === 'image' ? (
-                  <div className="relative w-full aspect-video">
-                    {' '}
-                    {/* 16:9 aspect ratio */}
-                    <Image
-                      src={media.url}
-                      alt="Post media"
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="rounded-lg object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="relative w-full aspect-video">
-                    {' '}
-                    {/* 16:9 aspect ratio */}
-                    <video
-                      src={media.url}
-                      controls
-                      className="w-full h-full rounded-lg object-cover"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
+            <div className="">
+              {media ? (
+                <div className="mb-4 flex justify-center items-center">
+                  {media.type === 'image' ? (
+                    <div className="relative w-full aspect-video">
+                      {' '}
+                      {/* 16:9 aspect ratio */}
+                      <Image
+                        src={media.url}
+                        alt="Post media"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="rounded-lg object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative w-full aspect-video">
+                      {' '}
+                      {/* 16:9 aspect ratio */}
+                      <video
+                        src={media.url}
+                        controls
+                        className="w-full h-full rounded-lg object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="mb-4 flex justify-center items-center">
+                  <div className="relative w-full aspect-video bg-gray-200 rounded"></div>
+                </div>
+              )}
+            </div>
 
-            <p className="mb-4">{content}</p>
+            <p className="mb-4 h-[3rem] overflow-hidden text-ellipsis whitespace-normal">
+              {content}
+            </p>
 
             {link && (
               <Link
@@ -487,7 +495,7 @@ const PostCard: React.FC<PostCardProps> = ({
           )}
         </div>
 
-        <div className="flex justify-center items-center space-x-8 mb-4">
+        <div className="flex items-center space-x-8 mb-4">
           <LikeButton
             onClick={handleLike}
             likes={localLikeCount}

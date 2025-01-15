@@ -14,6 +14,8 @@ import CustomInput from '@/Components/Shared/CustomInput';
 import { useAuth } from '@/hooks/auth.hook';
 import Link from 'next/link';
 import { LoginUser, RegisterUser } from '@/type';
+import Image from 'next/image';
+import bgImage from '../../../public/bg.jpg';
 
 // Utility function for concatenating class names
 const cn = (...classes: string[]) => {
